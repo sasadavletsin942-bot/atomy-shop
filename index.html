@@ -63,13 +63,21 @@
       width: 100%;
       height: 200px;
       object-fit: cover;
+      background: #ecf0f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7f8c8d;
+      font-size: 12px;
+      text-align: center;
+      padding: 10px;
     }
     .product-info {
       padding: 16px;
     }
     .product h3 {
       margin-bottom: 8px;
-      font-size: 18px;
+      font-size: 16px;
     }
     .price {
       font-weight: bold;
@@ -167,20 +175,20 @@
     // Товары
     const products = [
       { id: 1, name: "Atomy Evening Care Foam Cleanser", price: 1200, desc: "Мягкий пенящийся очищающий гель для вечернего ухода. Удаляет макияж и загрязнения." },
-      { id: 2, name: "Atomy Deep Cleanser", price: 1100, desc: "Глубоко очищает поры, регулирует выработку себума." },
-      { id: 3, name: "Atomy Sunscreen SPF 50+", price: 1500, desc: "Лёгкий невидимый солнцезащитный крем с высокой защитой." },
-      { id: 4, name: "Atomy Essence", price: 2800, desc: "Концентрированная эссенция для увлажнения и сияния кожи." },
-      { id: 5, name: "Atomy Eye Cream", price: 2200, desc: "Увлажняющий крем для области вокруг глаз." },
-      { id: 6, name: "Atomy Moisturizing Cream", price: 2000, desc: "Богатый питательный крем для лица." },
-      { id: 7, name: "Atomy Cleansing Oil", price: 1400, desc: "Мицеллярное масло для первого этапа очищения." },
-      { id: 8, name: "Atomy Skin Lotion", price: 1600, desc: "Тоник-лосьон для увлажнения и подготовки кожи." },
-      { id: 9, name: "Atomy Milk Lotion", price: 1700, desc: "Легкий молочко-уход для лица и шеи." },
-      { id: 10, name: "HemoHIM (БАД)", price: 3500, desc: "Натуральный растительный комплекс для иммунитета и энергии." },
-      { id: 11, name: "Atomy Alaska E-Omega3", price: 2900, desc: "Омега-3 из рыбьего жира дикого лосося." },
-      { id: 12, name: "Atomy Derma Essence", price: 3200, desc: "Интенсивная эссенция для восстановления чувствительной кожи." },
-      { id: 13, name: "Atomy BB Cream", price: 1900, desc: "BB-крем с уходовыми компонентами и лёгким покрытием." },
-      { id: 14, name: "Atomy Toothpaste Set", price: 800, desc: "Набор зубных паст с натуральными компонентами." },
-      { id: 15, name: "Cafe Arabica (80 пакетиков)", price: 1100, desc: "100% арабика в удобных пакетиках." }
+      { id: 2, name: "Atomy Deep Cleanser", price: 1100, desc: "Глубоко очищает поры, регулирует выработку себума. Подходит для жирной и комбинированной кожи." },
+      { id: 3, name: "Atomy Sunscreen SPF 50+", price: 1500, desc: "Лёгкий невидимый солнцезащитный крем с высокой защитой. Не оставляет белого следа." },
+      { id: 4, name: "Atomy Essence", price: 2800, desc: "Концентрированная эссенция для увлажнения и сияния кожи. Основа корейского ухода." },
+      { id: 5, name: "Atomy Eye Cream", price: 2200, desc: "Увлажняющий крем для области вокруг глаз. Уменьшает отёки и тёмные круги." },
+      { id: 6, name: "Atomy Moisturizing Cream", price: 2000, desc: "Богатый питательный крем для лица. Восстанавливает кожный барьер и удерживает влагу." },
+      { id: 7, name: "Atomy Cleansing Oil", price: 1400, desc: "Мицеллярное масло для первого этапа очищения. Растворяет водостойкий макияж." },
+      { id: 8, name: "Atomy Skin Lotion", price: 1600, desc: "Тоник-лосьон для увлажнения и подготовки кожи к последующему уходу." },
+      { id: 9, name: "Atomy Milk Lotion", price: 1700, desc: "Легкий молочко-уход для лица и шеи. Идеален для ежедневного использования." },
+      { id: 10, name: "HemoHIM (БАД)", price: 3500, desc: "Натуральный растительный комплекс для иммунитета и энергии. На основе корня ангелики." },
+      { id: 11, name: "Atomy Alaska E-Omega3", price: 2900, desc: "Омега-3 из рыбьего жира дикого лосося. Поддержка сердца, мозга и суставов." },
+      { id: 12, name: "Atomy Derma Essence", price: 3200, desc: "Интенсивная эссенция для восстановления чувствительной и повреждённой кожи." },
+      { id: 13, name: "Atomy BB Cream", price: 1900, desc: "BB-крем с уходовыми компонентами и лёгким покрытием. SPF 30." },
+      { id: 14, name: "Atomy Toothpaste Set", price: 800, desc: "Набор зубных паст с натуральными компонентами. Без SLS и парабенов." },
+      { id: 15, name: "Cafe Arabica (80 пакетиков)", price: 1100, desc: "100% арабика в удобных пакетиках. Натуральный кофе без добавок." }
     ];
 
     // Корзина
@@ -251,11 +259,49 @@
         alert("Корзина пуста!");
         return;
       }
-      alert("✅ Заказ оформлен! Скоро я с вами свяжусь.");
-      cart = [];
-      saveCart();
-      updateCartUI();
-      closeCart();
+
+      const name = prompt("Введите ваше имя:");
+      const contact = prompt("Введите ваш телефон или Telegram (например, @username):");
+      
+      if (!name || !contact) {
+        alert("Имя и контакт обязательны для оформления заказа!");
+        return;
+      }
+
+      let orderText = "";
+      let total = 0;
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        orderText += `${item.name} — ${item.quantity} шт × ${item.price} ₽ = ${itemTotal} ₽\n`;
+      });
+      orderText += `\nИтого: ${total} ₽`;
+
+      // Отправка на Formspree
+      fetch("https://formspree.io/f/mzddzbay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          contact: contact,
+          order: orderText,
+          total: total
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          alert("✅ Спасибо за заказ! Я скоро с вами свяжусь.");
+          cart = [];
+          saveCart();
+          updateCartUI();
+          closeCart();
+        } else {
+          alert("Ошибка отправки. Попробуйте позже.");
+        }
+      })
+      .catch(() => {
+        alert("Не удалось отправить заказ. Проверьте подключение к интернету.");
+      });
     }
 
     // Рендер товаров
@@ -263,7 +309,9 @@
       const container = document.getElementById('productList');
       container.innerHTML = products.map(p => `
         <div class="product">
-          <img src="https://via.placeholder.com/300x300/3498db/ffffff?text=${encodeURIComponent(p.name)}" alt="${p.name}">
+          <div class="product-img-placeholder">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3E${p.name}%3C/text%3E%3C/svg%3E" alt="${p.name}">
+          </div>
           <div class="product-info">
             <h3>${p.name}</h3>
             <p>${p.desc}</p>
@@ -279,11 +327,10 @@
     renderProducts();
     updateCartUI();
 
-    // Закрытие корзины по клику вне
     window.onclick = function(event) {
       const modal = document.getElementById('cartModal');
       if (event.target === modal) closeCart();
     }
   </script>
 </body>
-  </html>
+</html>
