@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Atomy — Официальный партнёр</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9f9f9;
+      padding: 16px;
+      margin: 0;
+      color: #2c3e50;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 20px;
+    }
+    .product {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      border-left: 4px solid #3498db;
+    }
+    .product h3 {
+      margin: 0 0 8px 0;
+      color: #2c3e50;
+    }
+    .price {
+      font-weight: bold;
+      color: #e74c3c;
+      font-size: 18px;
+      margin: 8px 0;
+    }
+    button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 8px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>✨ Atomy — Официальный партнёр</h1>
+  <div class="subtitle">Оригинальная продукция • Доставка по РФ • Оплата при получении</div>
+
+  <!-- Товар 1 -->
+  <div class="product">
+    <h3>Atomy Evening Care Foam Cleanser</h3>
+    <p>Мягкий пенящийся очищающий гель для вечернего ухода. Удаляет макияж и загрязнения.</p>
+    <div class="price">1 200 ₽</div>
+    <button onclick="order('Atomy Evening Care Foam Cleanser')">Заказать</button>
+  </div>
+
+  <!-- Товар 2 -->
+  <div class="product">
+    <h3>Atomy Deep Cleanser</h3>
+    <p>Глубоко очищает поры, регулирует выработку себума. Подходит для жирной и комбинированной кожи.</p>
+    <div class="price">1 100 ₽</div>
+    <button onclick="order('Atomy Deep Cleanser')">Заказать</button>
+  </div>
+
+  <!-- Товар 3 -->
+  <div class="product">
+    <h3>Atomy Sunscreen SPF 50+</h3>
+    <p>Лёгкий невидимый солнцезащитный крем с высокой защитой. Не оставляет белого следа.</p>
+    <div class="price">1 500 ₽</div>
+    <button onclick="order('Atomy Sunscreen SPF 50+')">Заказать</button>
+  </div>
+
+  <!-- Товар 4 -->
+  <div class="product">
+    <h3>Atomy Essence</h3>
+    <p>Концентрированная эссенция для увлажнения и сияния кожи. Основа корейского ухода.</p>
+    <div class="price">2 800 ₽</div>
+    <button onclick="order('Atomy Essence')">Заказать</button>
+  </div>
+
+  <!-- Товар 5 -->
+  <div class="product">
+    <h3>Atomy Eye Cream</h3>
+    <p>Увлажняющий крем для области вокруг глаз. Уменьшает отёки и тёмные круги.</p>
+    <div class="price">2 200 ₽</div>
+    <button onclick="order('Atomy Eye Cream')">Заказать</button>
+  </div>
+
+  <!-- Товар 6 -->
+  <div class="product">
+    <h3>Atomy Moisturizing Cream</h3>
+    <p>Богатый питательный крем для лица. Восстанавливает кожный барьер и удерживает влагу.</p>
+    <div class="price">2 000 ₽</div>
+    <button onclick="order('Atomy Moisturizing Cream')">Заказать</button>
+  </div>
+
+  <!-- Товар 7 -->
+  <div class="product">
+    <h3>Atomy Cleansing Oil</h3>
+    <p>Мицеллярное масло для первого этапа очищения. Растворяет водостойкий макияж.</p>
+    <div class="price">1 400 ₽</div>
+    <button onclick="order('Atomy Cleansing Oil')">Заказать</button>
+  </div>
+
+  <!-- Товар 8 -->
+  <div class="product">
+    <h3>Atomy Skin Lotion</h3>
+    <p>Тоник-лосьон для увлажнения и подготовки кожи к последующему уходу.</p>
+    <div class="price">1 600 ₽</div>
+    <button onclick="order('Atomy Skin Lotion')">Заказать</button>
+  </div>
+
+  <!-- Товар 9 -->
+  <div class="product">
+    <h3>Atomy Milk Lotion</h3>
+    <p>Легкий молочко-уход для лица и шеи. Идеален для ежедневного использования.</p>
+    <div class="price">1 700 ₽</div>
+    <button onclick="order('Atomy Milk Lotion')">Заказать</button>
+  </div>
+
+  <!-- Товар 10 -->
+  <div class="product">
+    <h3>HemoHIM (БАД)</h3>
+    <p>Натуральный растительный комплекс для иммунитета и энергии. На основе корня ангелики.</p>
+    <div class="price">3 500 ₽</div>
+    <button onclick="order('HemoHIM (БАД)')">Заказать</button>
+  </div>
+
+  <!-- Товар 11 -->
+  <div class="product">
+    <h3>Atomy Alaska E-Omega3</h3>
+    <p>Омега-3 из рыбьего жира дикого лосося. Поддержка сердца, мозга и суставов.</p>
+    <div class="price">2 900 ₽</div>
+    <button onclick="order('Atomy Alaska E-Omega3')">Заказать</button>
+  </div>
+
+  <!-- Товар 12 -->
+  <div class="product">
+    <h3>Atomy Derma Essence</h3>
+    <p>Интенсивная эссенция для восстановления чувствительной и повреждённой кожи.</p>
+    <div class="price">3 200 ₽</div>
+    <button onclick="order('Atomy Derma Essence')">Заказать</button>
+  </div>
+
+  <!-- Товар 13 -->
+  <div class="product">
+    <h3>Atomy BB Cream</h3>
+    <p>BB-крем с уходовыми компонентами и лёгким покрытием. SPF 30.</p>
+    <div class="price">1 900 ₽</div>
+    <button onclick="order('Atomy BB Cream')">Заказать</button>
+  </div>
+
+  <!-- Товар 14 -->
+  <div class="product">
+    <h3>Atomy Toothpaste Set</h3>
+    <p>Набор зубных паст с натуральными компонентами. Без SLS и парабенов.</p>
+    <div class="price">800 ₽</div>
+    <button onclick="order('Atomy Toothpaste Set')">Заказать</button>
+  </div>
+
+  <!-- Товар 15 -->
+  <div class="product">
+    <h3>Cafe Arabica (80 пакетиков)</h3>
+    <p>100% арабика в удобных пакетиках. Натуральный кофе без добавок.</p>
+    <div class="price">1 100 ₽</div>
+    <button onclick="order('Cafe Arabica (80 пакетиков)')">Заказать</button>
+  </div>
+
+  <script>
+    function order(productName) {
+      const user = Telegram.WebApp.initDataUnsafe?.user;
+      const userId = user?.id || 'неизвестен';
+      const message = `📦 Новый заказ Atomy!\nID пользователя: ${userId}\nТовар: ${productName}`;
+
+      Telegram.WebApp.sendData(message);
+      Telegram.WebApp.showAlert("✅ Заказ отправлен! Скоро я с вами свяжусь для подтверждения.");
+      Telegram.WebApp.close();
+    }
+
+    Telegram.WebApp.ready();
+    Telegram.WebApp.MainButton.setText("Закрыть");
+    Telegram.WebApp.MainButton.onClick(() => Telegram.WebApp.close());
+  </script>
+</body>
+    </html>
