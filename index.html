@@ -174,21 +174,112 @@
   <script>
     // Товары
     const products = [
-      { id: 1, name: "Atomy Evening Care Foam Cleanser", price: 1200, desc: "Мягкий пенящийся очищающий гель для вечернего ухода. Удаляет макияж и загрязнения." },
-      { id: 2, name: "Atomy Deep Cleanser", price: 1100, desc: "Глубоко очищает поры, регулирует выработку себума. Подходит для жирной и комбинированной кожи." },
-      { id: 3, name: "Atomy Sunscreen SPF 50+", price: 1500, desc: "Лёгкий невидимый солнцезащитный крем с высокой защитой. Не оставляет белого следа." },
-      { id: 4, name: "Atomy Essence", price: 2800, desc: "Концентрированная эссенция для увлажнения и сияния кожи. Основа корейского ухода." },
-      { id: 5, name: "Atomy Eye Cream", price: 2200, desc: "Увлажняющий крем для области вокруг глаз. Уменьшает отёки и тёмные круги." },
-      { id: 6, name: "Atomy Moisturizing Cream", price: 2000, desc: "Богатый питательный крем для лица. Восстанавливает кожный барьер и удерживает влагу." },
-      { id: 7, name: "Atomy Cleansing Oil", price: 1400, desc: "Мицеллярное масло для первого этапа очищения. Растворяет водостойкий макияж." },
-      { id: 8, name: "Atomy Skin Lotion", price: 1600, desc: "Тоник-лосьон для увлажнения и подготовки кожи к последующему уходу." },
-      { id: 9, name: "Atomy Milk Lotion", price: 1700, desc: "Легкий молочко-уход для лица и шеи. Идеален для ежедневного использования." },
-      { id: 10, name: "HemoHIM (БАД)", price: 3500, desc: "Натуральный растительный комплекс для иммунитета и энергии. На основе корня ангелики." },
-      { id: 11, name: "Atomy Alaska E-Omega3", price: 2900, desc: "Омега-3 из рыбьего жира дикого лосося. Поддержка сердца, мозга и суставов." },
-      { id: 12, name: "Atomy Derma Essence", price: 3200, desc: "Интенсивная эссенция для восстановления чувствительной и повреждённой кожи." },
-      { id: 13, name: "Atomy BB Cream", price: 1900, desc: "BB-крем с уходовыми компонентами и лёгким покрытием. SPF 30." },
-      { id: 14, name: "Atomy Toothpaste Set", price: 800, desc: "Набор зубных паст с натуральными компонентами. Без SLS и парабенов." },
-      { id: 15, name: "Cafe Arabica (80 пакетиков)", price: 1100, desc: "100% арабика в удобных пакетиках. Натуральный кофе без добавок." }
+      { 
+        id: 1, 
+        name: "Atomy Evening Care Foam Cleanser", 
+        price: 1200, 
+        desc: "Мягкий пенящийся очищающий гель для вечернего ухода. Удаляет макияж и загрязнения.", 
+        img: "https://photos.app.goo.gl/iTWndZ3PZStziKT26" 
+      },
+      { 
+        id: 2, 
+        name: "Atomy Deep Cleanser", 
+        price: 1100, 
+        desc: "Глубоко очищает поры, регулирует выработку себума. Подходит для жирной и комбинированной кожи.", 
+        img: "https://photos.app.goo.gl/ZRQQw4ThmpSA77JV8" 
+      },
+      { 
+        id: 3, 
+        name: "Atomy Sunscreen SPF 50+", 
+        price: 1500, 
+        desc: "Лёгкий невидимый солнцезащитный крем с высокой защитой. Не оставляет белого следа.", 
+        img: "https://photos.app.goo.gl/ZFvwS31uzZdexQap8" 
+      },
+      { 
+        id: 4, 
+        name: "Atomy Essence", 
+        price: 2800, 
+        desc: "Концентрированная эссенция для увлажнения и сияния кожи. Основа корейского ухода.", 
+        img: "https://photos.app.goo.gl/Pb7YbVftryrBeuWF8" 
+      },
+      { 
+        id: 5, 
+        name: "Atomy Eye Cream", 
+        price: 2200, 
+        desc: "Увлажняющий крем для области вокруг глаз. Уменьшает отёки и тёмные круги.", 
+        img: "https://photos.app.goo.gl/Ncj4HSRH9XkRfb8F7" 
+      },
+      { 
+        id: 6, 
+        name: "Atomy Moisturizing Cream", 
+        price: 2000, 
+        desc: "Богатый питательный крем для лица. Восстанавливает кожный барьер и удерживает влагу.", 
+        img: "https://photos.app.goo.gl/cDXFSwLvJmdVHfGv6" 
+      },
+      { 
+        id: 7, 
+        name: "Atomy Cleansing Oil", 
+        price: 1400, 
+        desc: "Мицеллярное масло для первого этапа очищения. Растворяет водостойкий макияж.", 
+        img: "https://photos.app.goo.gl/3QXGLnxK8hJuhpk67" 
+      },
+      { 
+        id: 8, 
+        name: "Atomy Body Lotion", // ← Исправлено: Skin → Body
+        price: 1600, 
+        desc: "Тоник-лосьон для увлажнения и подготовки кожи к последующему уходу.", 
+        img: "https://photos.app.goo.gl/cv3cpcdXqvhtK5pa7" 
+      },
+      { 
+        id: 9, 
+        name: "Atomy Milk Lotion", 
+        price: 1700, 
+        desc: "Легкий молочко-уход для лица и шеи. Идеален для ежедневного использования.", 
+        img: "https://photos.app.goo.gl/9mCqq5VZMdbMpFX28" 
+      },
+      { 
+        id: 10, 
+        name: "HemoHIM (БАД)", 
+        price: 3500, 
+        desc: "Натуральный растительный комплекс для иммунитета и энергии. На основе корня ангелики.", 
+        img: "https://photos.app.goo.gl/gxxt8yejTwYcK56K6" 
+      },
+      // Заглушки для товаров 11–15
+      { 
+        id: 11, 
+        name: "Atomy Alaska E-Omega3", 
+        price: 2900, 
+        desc: "Омега-3 из рыбьего жира дикого лосося. Поддержка сердца, мозга и суставов.", 
+        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Alaska E-Omega3%3C/text%3E%3C/svg%3E" 
+      },
+      { 
+        id: 12, 
+        name: "Atomy Derma Essence", 
+        price: 3200, 
+        desc: "Интенсивная эссенция для восстановления чувствительной и повреждённой кожи.", 
+        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Derma Essence%3C/text%3E%3C/svg%3E" 
+      },
+      { 
+        id: 13, 
+        name: "Atomy BB Cream", 
+        price: 1900, 
+        desc: "BB-крем с уходовыми компонентами и лёгким покрытием. SPF 30.", 
+        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy BB Cream%3C/text%3E%3C/svg%3E" 
+      },
+      { 
+        id: 14, 
+        name: "Atomy Toothpaste Set", 
+        price: 800, 
+        desc: "Набор зубных паст с натуральными компонентами. Без SLS и парабенов.", 
+        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Toothpaste Set%3C/text%3E%3C/svg%3E" 
+      },
+      { 
+        id: 15, 
+        name: "Cafe Arabica (80 пакетиков)", 
+        price: 1100, 
+        desc: "100% арабика в удобных пакетиках. Натуральный кофе без добавок.", 
+        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3ECafe Arabica%3C/text%3E%3C/svg%3E" 
+      }
     ];
 
     // Корзина
@@ -310,7 +401,7 @@
       container.innerHTML = products.map(p => `
         <div class="product">
           <div class="product-img-placeholder">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3E${p.name}%3C/text%3E%3C/svg%3E" alt="${p.name}">
+            <img src="${p.img}" alt="${p.name}" style="width:100%; height:200px; object-fit:cover;">
           </div>
           <div class="product-info">
             <h3>${p.name}</h3>
@@ -333,4 +424,4 @@
     }
   </script>
 </body>
-</html>
+  </html>       
