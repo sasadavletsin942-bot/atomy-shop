@@ -4,38 +4,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Atomy — Официальный партнёр</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #f9f9f9;
-      padding: 16px;
-      margin: 0;
       color: #2c3e50;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     h1 {
-      text-align: center;
       color: #2c3e50;
-      margin-bottom: 20px;
-      font-size: 24px;
+      margin-bottom: 10px;
     }
     .subtitle {
-      text-align: center;
-      font-size: 14px;
       color: #7f8c8d;
-      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    .cart-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #e74c3c;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 100;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
     }
     .product {
       background: white;
       border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+    .product:hover {
+      transform: translateY(-4px);
+    }
+    .product img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .product-info {
       padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      border-left: 4px solid #3498db;
     }
     .product h3 {
-      margin: 0 0 8px 0;
-      color: #2c3e50;
+      margin-bottom: 8px;
+      font-size: 18px;
     }
     .price {
       font-weight: bold;
@@ -43,130 +77,213 @@
       font-size: 18px;
       margin: 8px 0;
     }
-    button {
+    .btn {
       background: #3498db;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 10px;
       border-radius: 8px;
-      cursor: pointer;
       width: 100%;
-      font-size: 16px;
-      margin-top: 8px;
+      cursor: pointer;
       font-weight: bold;
+      margin-top: 8px;
     }
-    button:hover {
+    .btn:hover {
       background: #2980b9;
+    }
+
+    /* Корзина */
+    .cart-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .cart-content {
+      background: white;
+      width: 90%;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 12px;
+      position: relative;
+    }
+    .close-cart {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .cart-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .total {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 15px 0;
+      color: #2c3e50;
+    }
+    .order-btn {
+      background: #2ecc71;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>✨ Atomy — Официальный партнёр</h1>
-  <div class="subtitle">Оригинальная продукция • Доставка по РФ • Оплата при получении</div>
 
-  <div class="product">
-    <h3>Atomy Evening Care Foam Cleanser</h3>
-    <p>Мягкий пенящийся очищающий гель для вечернего ухода. Удаляет макияж и загрязнения.</p>
-    <div class="price">1 200 ₽</div>
-    <button onclick="order('Atomy Evening Care Foam Cleanser')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Deep Cleanser</h3>
-    <p>Глубоко очищает поры, регулирует выработку себума. Подходит для жирной и комбинированной кожи.</p>
-    <div class="price">1 100 ₽</div>
-    <button onclick="order('Atomy Deep Cleanser')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Sunscreen SPF 50+</h3>
-    <p>Лёгкий невидимый солнцезащитный крем с высокой защитой. Не оставляет белого следа.</p>
-    <div class="price">1 500 ₽</div>
-    <button onclick="order('Atomy Sunscreen SPF 50+')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Essence</h3>
-    <p>Концентрированная эссенция для увлажнения и сияния кожи. Основа корейского ухода.</p>
-    <div class="price">2 800 ₽</div>
-    <button onclick="order('Atomy Essence')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Eye Cream</h3>
-    <p>Увлажняющий крем для области вокруг глаз. Уменьшает отёки и тёмные круги.</p>
-    <div class="price">2 200 ₽</div>
-    <button onclick="order('Atomy Eye Cream')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Moisturizing Cream</h3>
-    <p>Богатый питательный крем для лица. Восстанавливает кожный барьер и удерживает влагу.</p>
-    <div class="price">2 000 ₽</div>
-    <button onclick="order('Atomy Moisturizing Cream')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Cleansing Oil</h3>
-    <p>Мицеллярное масло для первого этапа очищения. Растворяет водостойкий макияж.</p>
-    <div class="price">1 400 ₽</div>
-    <button onclick="order('Atomy Cleansing Oil')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Skin Lotion</h3>
-    <p>Тоник-лосьон для увлажнения и подготовки кожи к последующему уходу.</p>
-    <div class="price">1 600 ₽</div>
-    <button onclick="order('Atomy Skin Lotion')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Milk Lotion</h3>
-    <p>Легкий молочко-уход для лица и шеи. Идеален для ежедневного использования.</p>
-    <div class="price">1 700 ₽</div>
-    <button onclick="order('Atomy Milk Lotion')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>HemoHIM (БАД)</h3>
-    <p>Натуральный растительный комплекс для иммунитета и энергии. На основе корня ангелики.</p>
-    <div class="price">3 500 ₽</div>
-    <button onclick="order('HemoHIM (БАД)')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Alaska E-Omega3</h3>
-    <p>Омега-3 из рыбьего жира дикого лосося. Поддержка сердца, мозга и суставов.</p>
-    <div class="price">2 900 ₽</div>
-    <button onclick="order('Atomy Alaska E-Omega3')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Derma Essence</h3>
-    <p>Интенсивная эссенция для восстановления чувствительной и повреждённой кожи.</p>
-    <div class="price">3 200 ₽</div>
-    <button onclick="order('Atomy Derma Essence')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy BB Cream</h3>
-    <p>BB-крем с уходовыми компонентами и лёгким покрытием. SPF 30.</p>
-    <div class="price">1 900 ₽</div>
-    <button onclick="order('Atomy BB Cream')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Atomy Toothpaste Set</h3>
-    <p>Набор зубных паст с натуральными компонентами. Без SLS и парабенов.</p>
-    <div class="price">800 ₽</div>
-    <button onclick="order('Atomy Toothpaste Set')">Заказать</button>
-  </div>
-  <div class="product">
-    <h3>Cafe Arabica (80 пакетиков)</h3>
-    <p>100% арабика в удобных пакетиках. Натуральный кофе без добавок.</p>
-    <div class="price">1 100 ₽</div>
-    <button onclick="order('Cafe Arabica (80 пакетиков)')">Заказать</button>
+  <div class="cart-icon" id="cartIcon">🛒<span id="cartCount">0</span></div>
+
+  <header>
+    <h1>✨ Atomy — Официальный партнёр</h1>
+    <div class="subtitle">Оригинальная продукция • Доставка по РФ • Оплата при получении</div>
+  </header>
+
+  <div class="products" id="productList"></div>
+
+  <!-- Модальное окно корзины -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <div class="close-cart" onclick="closeCart()">×</div>
+      <h2>Ваша корзина</h2>
+      <div id="cartItems"></div>
+      <div class="total">Итого: <span id="totalPrice">0</span> ₽</div>
+      <button class="order-btn" onclick="placeOrder()">Оформить заказ</button>
+    </div>
   </div>
 
   <script>
-    function order(productName) {
-      const user = Telegram.WebApp.initDataUnsafe?.user;
-      const userId = user?.id || 'неизвестен';
-      const message = `📦 Новый заказ Atomy!\nID пользователя: ${userId}\nТовар: ${productName}`;
-      Telegram.WebApp.sendData(message);
-      Telegram.WebApp.showAlert("✅ Заказ отправлен! Скоро я с вами свяжусь.");
-      Telegram.WebApp.close();
+    // Товары
+    const products = [
+      { id: 1, name: "Atomy Evening Care Foam Cleanser", price: 1200, desc: "Мягкий пенящийся очищающий гель для вечернего ухода. Удаляет макияж и загрязнения." },
+      { id: 2, name: "Atomy Deep Cleanser", price: 1100, desc: "Глубоко очищает поры, регулирует выработку себума." },
+      { id: 3, name: "Atomy Sunscreen SPF 50+", price: 1500, desc: "Лёгкий невидимый солнцезащитный крем с высокой защитой." },
+      { id: 4, name: "Atomy Essence", price: 2800, desc: "Концентрированная эссенция для увлажнения и сияния кожи." },
+      { id: 5, name: "Atomy Eye Cream", price: 2200, desc: "Увлажняющий крем для области вокруг глаз." },
+      { id: 6, name: "Atomy Moisturizing Cream", price: 2000, desc: "Богатый питательный крем для лица." },
+      { id: 7, name: "Atomy Cleansing Oil", price: 1400, desc: "Мицеллярное масло для первого этапа очищения." },
+      { id: 8, name: "Atomy Skin Lotion", price: 1600, desc: "Тоник-лосьон для увлажнения и подготовки кожи." },
+      { id: 9, name: "Atomy Milk Lotion", price: 1700, desc: "Легкий молочко-уход для лица и шеи." },
+      { id: 10, name: "HemoHIM (БАД)", price: 3500, desc: "Натуральный растительный комплекс для иммунитета и энергии." },
+      { id: 11, name: "Atomy Alaska E-Omega3", price: 2900, desc: "Омега-3 из рыбьего жира дикого лосося." },
+      { id: 12, name: "Atomy Derma Essence", price: 3200, desc: "Интенсивная эссенция для восстановления чувствительной кожи." },
+      { id: 13, name: "Atomy BB Cream", price: 1900, desc: "BB-крем с уходовыми компонентами и лёгким покрытием." },
+      { id: 14, name: "Atomy Toothpaste Set", price: 800, desc: "Набор зубных паст с натуральными компонентами." },
+      { id: 15, name: "Cafe Arabica (80 пакетиков)", price: 1100, desc: "100% арабика в удобных пакетиках." }
+    ];
+
+    // Корзина
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Функции
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (product) {
+        const existing = cart.find(item => item.id === productId);
+        if (existing) {
+          existing.quantity++;
+        } else {
+          cart.push({ ...product, quantity: 1 });
+        }
+        saveCart();
+        updateCartUI();
+        alert(`✅ ${product.name} добавлен в корзину!`);
+      }
     }
-    Telegram.WebApp.ready();
-    Telegram.WebApp.MainButton.setText("Закрыть");
-    Telegram.WebApp.MainButton.onClick(() => Telegram.WebApp.close());
+
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    function openCart() {
+      renderCart();
+      document.getElementById('cartModal').style.display = 'block';
+    }
+
+    function closeCart() {
+      document.getElementById('cartModal').style.display = 'none';
+    }
+
+    function renderCart() {
+      const cartItemsEl = document.getElementById('cartItems');
+      const totalPriceEl = document.getElementById('totalPrice');
+
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = '<p>Корзина пуста</p>';
+        totalPriceEl.textContent = '0';
+        return;
+      }
+
+      let html = '';
+      let total = 0;
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        html += `
+          <div class="cart-item">
+            <strong>${item.name}</strong><br>
+            ${item.price} ₽ × ${item.quantity} = ${itemTotal} ₽
+          </div>
+        `;
+      });
+
+      cartItemsEl.innerHTML = html;
+      totalPriceEl.textContent = total;
+    }
+
+    function placeOrder() {
+      if (cart.length === 0) {
+        alert("Корзина пуста!");
+        return;
+      }
+      alert("✅ Заказ оформлен! Скоро я с вами свяжусь.");
+      cart = [];
+      saveCart();
+      updateCartUI();
+      closeCart();
+    }
+
+    // Рендер товаров
+    function renderProducts() {
+      const container = document.getElementById('productList');
+      container.innerHTML = products.map(p => `
+        <div class="product">
+          <img src="https://via.placeholder.com/300x300/3498db/ffffff?text=${encodeURIComponent(p.name)}" alt="${p.name}">
+          <div class="product-info">
+            <h3>${p.name}</h3>
+            <p>${p.desc}</p>
+            <div class="price">${p.price} ₽</div>
+            <button class="btn" onclick="addToCart(${p.id})">Добавить в корзину</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Инициализация
+    document.getElementById('cartIcon').addEventListener('click', openCart);
+    renderProducts();
+    updateCartUI();
+
+    // Закрытие корзины по клику вне
+    window.onclick = function(event) {
+      const modal = document.getElementById('cartModal');
+      if (event.target === modal) closeCart();
+    }
   </script>
 </body>
   </html>
