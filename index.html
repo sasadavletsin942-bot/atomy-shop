@@ -44,6 +44,23 @@
       cursor: pointer;
       z-index: 100;
     }
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #3498db;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 100;
+      display: none;
+    }
     .products {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -55,6 +72,7 @@
       overflow: hidden;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       transition: transform 0.2s;
+      cursor: pointer;
     }
     .product:hover {
       transform: translateY(-4px);
@@ -92,6 +110,39 @@
       background: #2980b9;
     }
 
+    /* Страница товара */
+    .product-page {
+      display: none;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .product-page img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      margin-bottom: 20px;
+    }
+    .product-page .price {
+      font-size: 24px;
+      margin: 15px 0;
+    }
+    .product-page .add-to-cart-btn {
+      background: #2ecc71;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .product-page .add-to-cart-btn:hover {
+      background: #27ae60;
+    }
+
     /* Корзина */
     .cart-modal {
       display: none;
@@ -122,6 +173,37 @@
     .cart-item {
       padding: 12px 0;
       border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-item-info {
+      flex: 1;
+    }
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+    }
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      margin: 0 10px;
+    }
+    .cart-item-quantity button {
+      background: #ecf0f1;
+      border: none;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+    .cart-item-remove {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
     }
     .total {
       font-size: 20px;
@@ -144,6 +226,7 @@
 <body>
 
   <div class="cart-icon" id="cartIcon">🛒<span id="cartCount">0</span></div>
+  <div class="back-button" id="backButton">←</div>
 
   <header>
     <h1>✨ Atomy — Официальный партнёр</h1>
@@ -151,6 +234,7 @@
   </header>
 
   <div class="products" id="productList"></div>
+  <div class="product-page" id="productPage"></div>
 
   <!-- Модальное окно корзины -->
   <div class="cart-modal" id="cartModal">
@@ -222,7 +306,6 @@
         desc: "Тоник-лосьон для увлажнения и подготовки кожи к последующему уходу.", 
         img: "https://i.siteapi.org/TBA07ixuObKNYdAFS4lwbkN7Pmk=/0x246:563x900/s2.siteapi.org/bff174006c724cd/img/ddlolvbaisgkg4k44cw00skoo408s0" 
       },
-      // Обновлённые товары 9–15
       { 
         id: 9, 
         name: "Atomy Cream Mist", 
@@ -289,7 +372,28 @@
         }
         saveCart();
         updateCartUI();
-        alert(`✅ ${product.name} добавлен в корзину!`);
+        // Убрано alert — теперь просто обновляется иконка корзины
+      }
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      saveCart();
+      updateCartUI();
+      renderCart(); // Обновляем корзину
+    }
+
+    function updateQuantity(productId, change) {
+      const item = cart.find(item => item.id === productId);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          removeFromCart(productId);
+        } else {
+          saveCart();
+          updateCartUI();
+          renderCart();
+        }
       }
     }
 
@@ -327,8 +431,18 @@
         total += itemTotal;
         html += `
           <div class="cart-item">
-            <strong>${item.name}</strong><br>
-            ${item.price} ₽ × ${item.quantity} = ${itemTotal} ₽
+            <div class="cart-item-info">
+              <strong>${item.name}</strong><br>
+              ${item.price} ₽ × ${item.quantity} = ${itemTotal} ₽
+            </div>
+            <div class="cart-item-actions">
+              <div class="cart-item-quantity">
+                <button onclick="updateQuantity(${item.id}, -1)">–</button>
+                <span>${item.quantity}</span>
+                <button onclick="updateQuantity(${item.id}, 1)">+</button>
+              </div>
+              <button class="cart-item-remove" onclick="removeFromCart(${item.id})">×</button>
+            </div>
           </div>
         `;
       });
@@ -391,20 +505,54 @@
     function renderProducts() {
       const container = document.getElementById('productList');
       container.innerHTML = products.map(p => `
-        <div class="product">
+        <div class="product" onclick="showProduct(${p.id})">
           <img src="${p.img}" alt="${p.name}" style="width:100%; height:200px; object-fit:cover;">
           <div class="product-info">
             <h3>${p.name}</h3>
             <p>${p.desc}</p>
             <div class="price">${p.price} ₽</div>
-            <button class="btn" onclick="addToCart(${p.id})">Добавить в корзину</button>
+            <button class="btn">Подробнее</button>
           </div>
         </div>
       `).join('');
     }
 
+    function showProduct(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      const productPage = document.getElementById('productPage');
+      const productList = document.getElementById('productList');
+      const backButton = document.getElementById('backButton');
+
+      productList.style.display = 'none';
+      productPage.style.display = 'block';
+      backButton.style.display = 'flex';
+
+      productPage.innerHTML = `
+        <div style="text-align: center;">
+          <img src="${product.img}" alt="${product.name}" style="max-width: 100%; max-height: 400px; object-fit: contain; margin-bottom: 20px;">
+          <h2>${product.name}</h2>
+          <div class="price">${product.price} ₽</div>
+          <p style="margin: 20px 0;">${product.desc}</p>
+          <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Добавить в корзину</button>
+        </div>
+      `;
+    }
+
+    function goBackToCatalog() {
+      const productPage = document.getElementById('productPage');
+      const productList = document.getElementById('productList');
+      const backButton = document.getElementById('backButton');
+
+      productList.style.display = 'grid';
+      productPage.style.display = 'none';
+      backButton.style.display = 'none';
+    }
+
     // Инициализация
     document.getElementById('cartIcon').addEventListener('click', openCart);
+    document.getElementById('backButton').addEventListener('click', goBackToCatalog);
     renderProducts();
     updateCartUI();
 
@@ -414,4 +562,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
