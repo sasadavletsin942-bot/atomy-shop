@@ -63,7 +63,7 @@
     }
     .products {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
     .product {
@@ -248,112 +248,392 @@
   </div>
 
   <script>
-    // Товары
+    // Товары (в порядке видео)
     const products = [
       { 
         id: 1, 
         name: "Atomy Evening Care Foam Cleanser", 
-        price: 1200, 
+        price: 850, 
         desc: "Мягкий пенящийся очищающий гель для вечернего ухода. Удаляет макияж и загрязнения.", 
         img: "https://image.atomy.ru/600_600/RU/goods/R00305/org/261/250523000042261.png" 
       },
       { 
         id: 2, 
-        name: "Atomy Deep Cleanser", 
+        name: "Atomy Helsi Glow Base", 
         price: 1100, 
-        desc: "Глубоко очищает поры, регулирует выработку себума. Подходит для жирной и комбинированной кожи.", 
-        img: "https://i.siteapi.org/NuNysiJxxUAuXkk4_Si2Dg0lfeA=/0x0:598x673/s2.siteapi.org/bff174006c724cd/img/nxd7artgtn48wwowcwgosc008wo4ok" 
-      },
-      { 
-        id: 3, 
-        name: "Atomy Sunscreen SPF 50+", 
-        price: 1500, 
-        desc: "Лёгкий невидимый солнцезащитный крем с высокой защитой. Не оставляет белого следа.", 
-        img: "https://image.atomy.com/MY/goods/M00275/org/471/241024000028471.jpg?w=1360&h=1360" 
-      },
-      { 
-        id: 4, 
-        name: "Atomy Essence", 
-        price: 2800, 
-        desc: "Концентрированная эссенция для увлажнения и сияния кожи. Основа корейского ухода.", 
-        img: "https://image.atomy.ru/40_40/RU/goods/R00194/org/166/250523000042166.jpg" 
-      },
-      { 
-        id: 5, 
-        name: "Atomy Eye Cream", 
-        price: 2200, 
-        desc: "Увлажняющий крем для области вокруг глаз. Уменьшает отёки и тёмные круги.", 
-        img: "https://image.atomy.com/CA/goods/C00192/org/192/thumb_fa6b0bb8-bee1-4967-b4f4-25cb4227a772.jpg?w=1360&h=1360" 
-      },
-      { 
-        id: 6, 
-        name: "Atomy Moisturizing Cream", 
-        price: 2000, 
-        desc: "Богатый питательный крем для лица. Восстанавливает кожный барьер и удерживает влагу.", 
-        img: "https://image.atomy.ru/1360_1360/RU/goods/R00198/org/728/250523000041728.png" 
-      },
-      { 
-        id: 7, 
-        name: "Atomy Cleansing Oil", 
-        price: 1400, 
-        desc: "Мицеллярное масло для первого этапа очищения. Растворяет водостойкий макияж.", 
-        img: "https://image.atomy.ru/1360_1360/RU/goods/R00482/org/188/250523000042188.png" 
-      },
-      { 
-        id: 8, 
-        name: "Atomy Body Lotion", 
-        price: 1600, 
-        desc: "Тоник-лосьон для увлажнения и подготовки кожи к последующему уходу.", 
-        img: "https://i.siteapi.org/TBA07ixuObKNYdAFS4lwbkN7Pmk=/0x246:563x900/s2.siteapi.org/bff174006c724cd/img/ddlolvbaisgkg4k44cw00skoo408s0" 
-      },
-      { 
-        id: 9, 
-        name: "Atomy Cream Mist", 
-        price: 1700, 
-        desc: "Легкий туман-уход, который мгновенно увлажняет кожу лица и тела. Идеален для ежедневного использования, особенно в условиях сухого воздуха или после пребывания на солнце. Быстро впитывается, не оставляет липкости.", 
+        desc: "База под макияж с эффектом сияния. Выравнивает тон и матирует кожу.", 
         img: "https://avatars.mds.yandex.net/get-mpic/15049969/2a0000019a1a5e10118efe2f64c49233a91f/orig" 
       },
       { 
-        id: 10, 
-        name: "HemoHIM (БАД)", 
-        price: 3500, 
-        desc: "Натуральный растительный комплекс для иммунитета и энергии. На основе корня ангелики.", 
-        img: "https://avatars.mds.yandex.net/get-mpic/10576558/2a0000018ce43be46f1af4522d54bd54598d/orig" 
-      },
-      { 
-        id: 11, 
-        name: "Atomy Alaska E-Omega3", 
-        price: 2900, 
-        desc: "Омега-3 из рыбьего жира дикого лосося. Поддержка сердца, мозга и суставов.", 
-        img: "https://image.atomy.com/SG/goods/S00111/org/742/241114000029742.jpeg?w=1360&h=1360" 
-      },
-      { 
-        id: 12, 
-        name: "Atomy Curling Essence", 
-        price: 3200, 
-        desc: "Интенсивная эссенция для укрепления и восстановления повреждённых, окрашенных или вьющихся волос. Придаёт блеск, эластичность и защищает от термовоздействия при укладке.", 
-        img: "https://image.atomy.ru/1360_1360/RU/goods/R00680/org/508/250523000042508.png" 
-      },
-      { 
-        id: 13, 
-        name: "Atomy BB Cream", 
-        price: 1900, 
-        desc: "BB-крем с уходовыми компонентами и лёгким покрытием. SPF 30.", 
+        id: 3, 
+        name: "Atomy Lip Balm", 
+        price: 450, 
+        desc: "Бальзам для губ с витамином Е. Защищает от сухости и трещин.", 
         img: "https://img-edg.joomcdn.net/4bf4adf076bc000588879003a71df7b0b93245c1_1024_1024.jpeg" 
       },
       { 
-        id: 14, 
-        name: "Atomy Toothpaste Set", 
+        id: 4, 
+        name: "Atomy Firm Nutritive Cream", 
+        price: 1750, 
+        desc: "Питательный крем с коллагеном. Разглаживает морщины и придаёт упругость.", 
+        img: "https://image.atomy.com/SG/goods/S00111/org/742/241114000029742.jpeg?w=1360&h=1360" 
+      },
+      { 
+        id: 5, 
+        name: "Atomy BB Cream", 
         price: 800, 
-        desc: "Набор зубных паст с натуральными компонентами. Без SLS и парабенов.", 
+        desc: "BB-крем с уходовыми компонентами и лёгким покрытием. SPF 30.", 
+        img: "https://image.atomy.ru/40_40/RU/goods/R00194/org/166/250523000042166.jpg" 
+      },
+      { 
+        id: 6, 
+        name: "Atomy Daily Mask (Питание и Упругость)", 
+        price: 1000, 
+        desc: "Одноразовая маска для интенсивного питания и укрепления кожи.", 
+        img: "https://image.atomy.com/CA/goods/C00192/org/192/thumb_fa6b0bb8-bee1-4967-b4f4-25cb4227a772.jpg?w=1360&h=1360" 
+      },
+      { 
+        id: 7, 
+        name: "Atomy Shampoo & Shower Gel for Men", 
+        price: 1550, 
+        desc: "Шампунь и гель для душа в одном флаконе. Свежий цитрусовый аромат.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00198/org/728/250523000041728.png" 
+      },
+      { 
+        id: 8, 
+        name: "Atomy Absolute CellActive Cream", 
+        price: 3000, 
+        desc: "Питательный крем с экстрактом стволовых клеток. Восстанавливает и разглаживает кожу.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00482/org/188/250523000042188.png" 
+      },
+      { 
+        id: 9, 
+        name: "Atomy Tush Sila Obema", 
+        price: 1300, 
+        desc: "Тушь для ресниц с эффектом объёма. Не смазывается и не осыпается.", 
+        img: "https://i.siteapi.org/TBA07ixuObKNYdAFS4lwbkN7Pmk=/0x246:563x900/s2.siteapi.org/bff174006c724cd/img/ddlolvbaisgkg4k44cw00skoo408s0" 
+      },
+      { 
+        id: 10, 
+        name: "Atomy Morskije Patchi dlya Glaz", 
+        price: 1550, 
+        desc: "Патчи для области вокруг глаз с экстрактом морских водорослей. Увлажняют и убирают отёки.", 
+        img: "https://image.atomy.ru/600_600/RU/goods/R00975/org/659/250523000041659.jpg" 
+      },
+      { 
+        id: 11, 
+        name: "Atomy Evening Care Cleansing Set", 
+        price: 3200, 
+        desc: "Набор для вечернего ухода: гель, пилинг и молочко. Глубоко очищает и увлажняет.", 
+        img: "https://image.atomy.com/MY/goods/M00275/org/471/241024000028471.jpg?w=1360&h=1360" 
+      },
+      { 
+        id: 12, 
+        name: "Atomy Evening Care Peeling Gel", 
+        price: 850, 
+        desc: "Гель для пилинга с фруктовыми кислотами. Удаляет ороговевшие клетки.", 
         img: "https://image.atomy.ru/40_40/RU/goods/R00523/org/769/250523000041769.jpg" 
       },
       { 
+        id: 13, 
+        name: "Atomy Centella Toner", 
+        price: 1450, 
+        desc: "Тоник с экстрактом центеллы. Успокаивает и снимает раздражение.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00680/org/508/250523000042508.png" 
+      },
+      { 
+        id: 14, 
+        name: "Atomy Daily Mask (Улучшающая цвет лица)", 
+        price: 1000, 
+        desc: "Одноразовая маска для выравнивания тона и сияния кожи.", 
+        img: "https://avatars.mds.yandex.net/get-mpic/10576558/2a0000018ce43be46f1af4522d54bd54598d/orig" 
+      },
+      { 
         id: 15, 
-        name: "Cafe Arabica (80 пакетиков)", 
+        name: "Atomy Acropass (5 упаковок)", 
+        price: 5500, 
+        desc: "Патчи для лица с гиалуроновой кислотой. Увлажняют и разглаживают морщины.", 
+        img: "https://image.atomy.com/SG/goods/S00111/org/742/241114000029742.jpeg?w=1360&h=1360" 
+      },
+      { 
+        id: 16, 
+        name: "Atomy Centella Cream", 
+        price: 1900, 
+        desc: "Крем с экстрактом центеллы. Успокаивает и восстанавливает кожу.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00198/org/728/250523000041728.png" 
+      },
+      { 
+        id: 17, 
+        name: "Atomy Spray Instant Beauty", 
+        price: 1300, 
+        desc: "Спрей для мгновенного сияния кожи. Идеален перед выходом.", 
+        img: "https://image.atomy.ru/600_600/RU/goods/R00305/org/261/250523000042261.png" 
+      },
+      { 
+        id: 18, 
+        name: "Atomy Multi-Action Cleanser for Men", 
+        price: 1000, 
+        desc: "Очищающее средство для мужчин. Удаляет загрязнения и жир.", 
+        img: "https://i.siteapi.org/NuNysiJxxUAuXkk4_Si2Dg0lfeA=/0x0:598x673/s2.siteapi.org/bff174006c724cd/img/nxd7artgtn48wwowcwgosc008wo4ok" 
+      },
+      { 
+        id: 19, 
+        name: "Atomy Absolute Hydrating Mist", 
+        price: 2000, 
+        desc: "Сыворотка-мист с гиалуроновой кислотой. Интенсивно увлажняет и тонизирует.", 
+        img: "https://image.atomy.com/CA/goods/C00192/org/192/thumb_fa6b0bb8-bee1-4967-b4f4-25cb4227a772.jpg?w=1360&h=1360" 
+      },
+      { 
+        id: 20, 
+        name: "Adelica Color Glow Lipstick", 
         price: 1100, 
-        desc: "100% арабика в удобных пакетиках. Натуральный кофе без добавок.", 
+        desc: "Блеск для губ с эффектом цвета. Придаёт естественный блеск.", 
+        img: "https://image.atomy.ru/40_40/RU/goods/R00194/org/166/250523000042166.jpg" 
+      },
+      { 
+        id: 21, 
+        name: "Atomy Absolute Sunscreen", 
+        price: 1100, 
+        desc: "Солнцезащитный крем с SPF 50+. Не оставляет белого следа.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00482/org/188/250523000042188.png" 
+      },
+      { 
+        id: 22, 
+        name: "Atomy Daily Mask (Увлажнение)", 
+        price: 1000, 
+        desc: "Одноразовая маска для интенсивного увлажнения.", 
+        img: "https://image.atomy.com/SG/goods/S00111/org/742/241114000029742.jpeg?w=1360&h=1360" 
+      },
+      { 
+        id: 23, 
+        name: "Atomy Sunscreen Cream", 
+        price: 800, 
+        desc: "Солнцезащитный крем с легким покрытием. Защищает от UVA/UVB-лучей.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00680/org/508/250523000042508.png" 
+      },
+      { 
+        id: 24, 
+        name: "Atomy Super Energy & Moisture for Men", 
+        price: 2000, 
+        desc: "Увлажняющий крем для мужской кожи. Подходит для ежедневного использования.", 
+        img: "https://i.siteapi.org/TBA07ixuObKNYdAFS4lwbkN7Pmk=/0x246:563x900/s2.siteapi.org/bff174006c724cd/img/ddlolvbaisgkg4k44cw00skoo408s0" 
+      },
+      { 
+        id: 25, 
+        name: "Atomy CellActive Ampoule", 
+        price: 3400, 
+        desc: "Ампульная сыворотка с ферментированными компонентами. Улучшает текстуру и тон кожи.", 
+        img: "https://image.atomy.ru/600_600/RU/goods/R00305/org/261/250523000042261.png" 
+      },
+      { 
+        id: 26, 
+        name: "Atomy Firm Cream for Eye Area", 
+        price: 1750, 
+        desc: "Крем для кожи вокруг глаз с коллагеном. Уменьшает морщины и придаёт упругость.", 
+        img: "https://image.atomy.com/CA/goods/C00192/org/192/thumb_fa6b0bb8-bee1-4967-b4f4-25cb4227a772.jpg?w=1360&h=1360" 
+      },
+      { 
+        id: 27, 
+        name: "Atomy Hydra Shining Set", 
+        price: 3400, 
+        desc: "Набор для глубокого увлажнения: тоник, эссенция и крем.", 
+        img: "https://image.atomy.ru/40_40/RU/goods/R00194/org/166/250523000042166.jpg" 
+      },
+      { 
+        id: 28, 
+        name: "Atomy Absolute BB", 
+        price: 1550, 
+        desc: "BB-крем с уходовыми компонентами и SPF 30. Выравнивает тон и матирует кожу.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00482/org/188/250523000042188.png" 
+      },
+      { 
+        id: 29, 
+        name: "Atomy Centella Gel Cleanser", 
+        price: 1300, 
+        desc: "Гель для умывания с экстрактом центеллы. Успокаивает и снимает раздражение.", 
+        img: "https://image.atomy.com/SG/goods/S00111/org/742/241114000029742.jpeg?w=1360&h=1360" 
+      },
+      { 
+        id: 30, 
+        name: "Atomy CellActive Cream for Eye Area", 
+        price: 3200, 
+        desc: "Крем для кожи вокруг глаз с пептидами. Уменьшает отёки и тёмные круги.", 
+        img: "https://i.siteapi.org/NuNysiJxxUAuXkk4_Si2Dg0lfeA=/0x0:598x673/s2.siteapi.org/bff174006c724cd/img/nxd7artgtn48wwowcwgosc008wo4ok" 
+      },
+      { 
+        id: 31, 
+        name: "Atomy Peeling Pads", 
+        price: 1300, 
+        desc: "Пэды для химического пилинга. Удаляют ороговевшие клетки и выравнивают тон.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00680/org/508/250523000042508.png" 
+      },
+      { 
+        id: 32, 
+        name: "Atomy Sunscreen (тонирующий)", 
+        price: 800, 
+        desc: "Солнцезащитный крем с легким тонирующим эффектом. Защищает и выравнивает тон.", 
+        img: "https://image.atomy.ru/40_40/RU/goods/R00523/org/769/250523000041769.jpg" 
+      },
+      { 
+        id: 33, 
+        name: "Atomy Tush Sila Obema", 
+        price: 1300, 
+        desc: "Тушь для ресниц с эффектом объёма. Не смазывается и не осыпается.", 
+        img: "https://image.atomy.com/CA/goods/C00192/org/192/thumb_fa6b0bb8-bee1-4967-b4f4-25cb4227a772.jpg?w=1360&h=1360" 
+      },
+      { 
+        id: 34, 
+        name: "Atomy Morskije Patchi dlya Glaz", 
+        price: 1550, 
+        desc: "Патчи для области вокруг глаз с экстрактом морских водорослей. Увлажняют и убирают отёки.", 
         img: "https://image.atomy.ru/600_600/RU/goods/R00975/org/659/250523000041659.jpg" 
+      },
+      { 
+        id: 35, 
+        name: "Atomy Evening Care Cleansing Set", 
+        price: 3200, 
+        desc: "Набор для вечернего ухода: гель, пилинг и молочко. Глубоко очищает и увлажняет.", 
+        img: "https://image.atomy.com/MY/goods/M00275/org/471/241024000028471.jpg?w=1360&h=1360" 
+      },
+      { 
+        id: 36, 
+        name: "Atomy Evening Care Peeling Gel", 
+        price: 850, 
+        desc: "Гель для пилинга с фруктовыми кислотами. Удаляет ороговевшие клетки.", 
+        img: "https://image.atomy.ru/40_40/RU/goods/R00523/org/769/250523000041769.jpg" 
+      },
+      { 
+        id: 37, 
+        name: "Atomy Centella Toner", 
+        price: 1450, 
+        desc: "Тоник с экстрактом центеллы. Успокаивает и снимает раздражение.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00680/org/508/250523000042508.png" 
+      },
+      { 
+        id: 38, 
+        name: "Atomy Daily Mask (Улучшающая цвет лица)", 
+        price: 1000, 
+        desc: "Одноразовая маска для выравнивания тона и сияния кожи.", 
+        img: "https://avatars.mds.yandex.net/get-mpic/10576558/2a0000018ce43be46f1af4522d54bd54598d/orig" 
+      },
+      { 
+        id: 39, 
+        name: "Atomy Acropass (5 упаковок)", 
+        price: 5500, 
+        desc: "Патчи для лица с гиалуроновой кислотой. Увлажняют и разглаживают морщины.", 
+        img: "https://image.atomy.com/SG/goods/S00111/org/742/241114000029742.jpeg?w=1360&h=1360" 
+      },
+      { 
+        id: 40, 
+        name: "Atomy Centella Cream", 
+        price: 1900, 
+        desc: "Крем с экстрактом центеллы. Успокаивает и восстанавливает кожу.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00198/org/728/250523000041728.png" 
+      },
+      { 
+        id: 41, 
+        name: "Atomy Spray Instant Beauty", 
+        price: 1300, 
+        desc: "Спрей для мгновенного сияния кожи. Идеален перед выходом.", 
+        img: "https://image.atomy.ru/600_600/RU/goods/R00305/org/261/250523000042261.png" 
+      },
+      { 
+        id: 42, 
+        name: "Atomy Multi-Action Cleanser for Men", 
+        price: 1000, 
+        desc: "Очищающее средство для мужчин. Удаляет загрязнения и жир.", 
+        img: "https://i.siteapi.org/NuNysiJxxUAuXkk4_Si2Dg0lfeA=/0x0:598x673/s2.siteapi.org/bff174006c724cd/img/nxd7artgtn48wwowcwgosc008wo4ok" 
+      },
+      { 
+        id: 43, 
+        name: "Atomy Absolute Hydrating Mist", 
+        price: 2000, 
+        desc: "Сыворотка-мист с гиалуроновой кислотой. Интенсивно увлажняет и тонизирует.", 
+        img: "https://image.atomy.com/CA/goods/C00192/org/192/thumb_fa6b0bb8-bee1-4967-b4f4-25cb4227a772.jpg?w=1360&h=1360" 
+      },
+      { 
+        id: 44, 
+        name: "Adelica Color Glow Lipstick", 
+        price: 1100, 
+        desc: "Блеск для губ с эффектом цвета. Придаёт естественный блеск.", 
+        img: "https://image.atomy.ru/40_40/RU/goods/R00194/org/166/250523000042166.jpg" 
+      },
+      { 
+        id: 45, 
+        name: "Atomy Absolute Sunscreen", 
+        price: 1100, 
+        desc: "Солнцезащитный крем с SPF 50+. Не оставляет белого следа.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00482/org/188/250523000042188.png" 
+      },
+      { 
+        id: 46, 
+        name: "Atomy Daily Mask (Увлажнение)", 
+        price: 1000, 
+        desc: "Одноразовая маска для интенсивного увлажнения.", 
+        img: "https://image.atomy.com/SG/goods/S00111/org/742/241114000029742.jpeg?w=1360&h=1360" 
+      },
+      { 
+        id: 47, 
+        name: "Atomy Sunscreen Cream", 
+        price: 800, 
+        desc: "Солнцезащитный крем с легким покрытием. Защищает от UVA/UVB-лучей.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00680/org/508/250523000042508.png" 
+      },
+      { 
+        id: 48, 
+        name: "Atomy Super Energy & Moisture for Men", 
+        price: 2000, 
+        desc: "Увлажняющий крем для мужской кожи. Подходит для ежедневного использования.", 
+        img: "https://i.siteapi.org/TBA07ixuObKNYdAFS4lwbkN7Pmk=/0x246:563x900/s2.siteapi.org/bff174006c724cd/img/ddlolvbaisgkg4k44cw00skoo408s0" 
+      },
+      { 
+        id: 49, 
+        name: "Atomy CellActive Ampoule", 
+        price: 3400, 
+        desc: "Ампульная сыворотка с ферментированными компонентами. Улучшает текстуру и тон кожи.", 
+        img: "https://image.atomy.ru/600_600/RU/goods/R00305/org/261/250523000042261.png" 
+      },
+      { 
+        id: 50, 
+        name: "Atomy Firm Cream for Eye Area", 
+        price: 1750, 
+        desc: "Крем для кожи вокруг глаз с коллагеном. Уменьшает морщины и придаёт упругость.", 
+        img: "https://image.atomy.com/CA/goods/C00192/org/192/thumb_fa6b0bb8-bee1-4967-b4f4-25cb4227a772.jpg?w=1360&h=1360" 
+      },
+      { 
+        id: 51, 
+        name: "Atomy Hydra Shining Set", 
+        price: 3400, 
+        desc: "Набор для глубокого увлажнения: тоник, эссенция и крем.", 
+        img: "https://image.atomy.ru/40_40/RU/goods/R00194/org/166/250523000042166.jpg" 
+      },
+      { 
+        id: 52, 
+        name: "Atomy Absolute BB", 
+        price: 1550, 
+        desc: "BB-крем с уходовыми компонентами и SPF 30. Выравнивает тон и матирует кожу.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00482/org/188/250523000042188.png" 
+      },
+      { 
+        id: 53, 
+        name: "Atomy Centella Gel Cleanser", 
+        price: 1300, 
+        desc: "Гель для умывания с экстрактом центеллы. Успокаивает и снимает раздражение.", 
+        img: "https://image.atomy.com/SG/goods/S00111/org/742/241114000029742.jpeg?w=1360&h=1360" 
+      },
+      { 
+        id: 54, 
+        name: "Atomy CellActive Cream for Eye Area", 
+        price: 3200, 
+        desc: "Крем для кожи вокруг глаз с пептидами. Уменьшает отёки и тёмные круги.", 
+        img: "https://i.siteapi.org/NuNysiJxxUAuXkk4_Si2Dg0lfeA=/0x0:598x673/s2.siteapi.org/bff174006c724cd/img/nxd7artgtn48wwowcwgosc008wo4ok" 
+      },
+      { 
+        id: 55, 
+        name: "Atomy Peeling Pads", 
+        price: 1300, 
+        desc: "Пэды для химического пилинга. Удаляют ороговевшие клетки и выравнивают тон.", 
+        img: "https://image.atomy.ru/1360_1360/RU/goods/R00680/org/508/250523000042508.png" 
       }
     ];
 
@@ -372,7 +652,6 @@
         }
         saveCart();
         updateCartUI();
-        // Убрано alert — теперь просто обновляется иконка корзины
       }
     }
 
@@ -380,7 +659,7 @@
       cart = cart.filter(item => item.id !== productId);
       saveCart();
       updateCartUI();
-      renderCart(); // Обновляем корзину
+      renderCart();
     }
 
     function updateQuantity(productId, change) {
