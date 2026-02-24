@@ -1,808 +1,295 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Atomy — Официальный партнёр</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f9f9f9;
-      color: #2c3e50;
-      padding: 20px;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    h1 {
-      color: #2c3e50;
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      color: #7f8c8d;
-      font-size: 16px;
-    }
-    .cart-icon {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #e74c3c;
-      color: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 100;
-    }
-    .back-button {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: #3498db;
-      color: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 100;
-      display: none;
-    }
-    .products {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-    .product {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      transition: transform 0.2s;
-      cursor: pointer;
-    }
-    .product:hover {
-      transform: translateY(-4px);
-    }
-    .product img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-    .product-info {
-      padding: 16px;
-    }
-    .product h3 {
-      margin-bottom: 8px;
-      font-size: 16px;
-    }
-    .price {
-      font-weight: bold;
-      color: #e74c3c;
-      font-size: 18px;
-      margin: 8px 0;
-    }
-    .btn {
-      background: #3498db;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 8px;
-      width: 100%;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 8px;
-    }
-    .btn:hover {
-      background: #2980b9;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация в Atomy | Партнерская программа</title>
+    <style>
+        /* --- Сброс стилей и базовые настройки --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    /* Страница товара */
-    .product-page {
-      display: none;
-      padding: 20px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .product-page img {
-      width: 100%;
-      max-height: 400px;
-      object-fit: contain;
-      margin-bottom: 20px;
-    }
-    .product-page .price {
-      font-size: 24px;
-      margin: 15px 0;
-    }
-    .product-page .add-to-cart-btn {
-      background: #2ecc71;
-      padding: 12px;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .product-page .add-to-cart-btn:hover {
-      background: #27ae60;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
 
-    /* Корзина */
-    .cart-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-    }
-    .cart-content {
-      background: white;
-      width: 90%;
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 20px;
-      border-radius: 12px;
-      position: relative;
-    }
-    .close-cart {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 24px;
-      cursor: pointer;
-    }
-    .cart-item {
-      padding: 12px 0;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cart-item-info {
-      flex: 1;
-    }
-    .cart-item-actions {
-      display: flex;
-      align-items: center;
-    }
-    .cart-item-quantity {
-      display: flex;
-      align-items: center;
-      margin: 0 10px;
-    }
-    .cart-item-quantity button {
-      background: #ecf0f1;
-      border: none;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-    }
-    .cart-item-remove {
-      background: #e74c3c;
-      color: white;
-      border: none;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-    .total {
-      font-size: 20px;
-      font-weight: bold;
-      margin: 15px 0;
-      color: #2c3e50;
-    }
-    .order-btn {
-      background: #2ecc71;
-      padding: 12px;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-  </style>
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- Цветовая палитра (можно менять под бренд) --- */
+        :root {
+            --primary-color: #0056b3; /* Синий цвет кнопок */
+            --secondary-color: #004494; /* Темно-синий для ховера */
+            --accent-color: #ff9900; /* Оранжевый для акцентов */
+            --text-light: #fff;
+            --bg-light: #fff;
+            --bg-grey: #f4f6f8;
+        }
+
+        /* --- Контейнер --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Шапка --- */
+        header {
+            background: var(--bg-light);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-btn {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* --- Главный экран (Hero) --- */
+        .hero {
+            background: linear-gradient(135deg, #0056b3 0%, #0088ff 100%);
+            color: var(--text-light);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent-color);            color: var(--text-light);
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            background: #e68a00;
+        }
+
+        /* --- Преимущества --- */
+        .benefits {
+            padding: 60px 0;
+            background: var(--bg-light);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: #222;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-card {
+            background: var(--bg-grey);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .benefit-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .benefit-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        .benefit-card h3 {
+            margin-bottom: 15px;
+        }
+
+        /* --- Форма регистрации / Призыв --- */
+        .register-section {
+            padding: 60px 0;
+            background: var(--bg-grey);
+            text-align: center;
+        }
+
+        .form-box {
+            background: var(--bg-light);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .note {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #777;        }
+
+        /* --- Футер --- */
+        footer {
+            background: #222;
+            color: #aaa;
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        /* --- Адаптивность для мобильных --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .header-wrap { flex-direction: column; gap: 15px; }
+            .benefits-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="cart-icon" id="cartIcon">🛒<span id="cartCount">0</span></div>
-  <div class="back-button" id="backButton">←</div>
-
-  <header>
-    <h1>✨ Atomy — Официальный партнёр</h1>
-    <div class="subtitle">Оригинальная продукция • Доставка по РФ • Оплата при получении</div>
-  </header>
-
-  <div class="products" id="productList"></div>
-  <div class="product-page" id="productPage"></div>
-
-  <!-- Модальное окно корзины -->
-  <div class="cart-modal" id="cartModal">
-    <div class="cart-content">
-      <div class="close-cart" onclick="closeCart()">×</div>
-      <h2>Ваша корзина</h2>
-      <div id="cartItems"></div>
-      <div class="total">Итого: <span id="totalPrice">0</span> ₽</div>
-      <button class="order-btn" onclick="placeOrder()">Оформить заказ</button>
-    </div>
-  </div>
-
-  <script>
-    // Товары (в порядке видео)
-    const products = [
-      { 
-        id: 1, 
-        name: "Atomy Ивнинг Кеар Пенка для умывания", 
-        price: 850, 
-        desc: "Мягкий пенящийся очищающий гель для вечернего ухода. Удаляет макияж и загрязнения.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Ивнинг Кеар Пенка%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 2, 
-        name: "Atomy Хэлси Глоу база под макияж", 
-        price: 1100, 
-        desc: "База под макияж с эффектом сияния. Выравнивает тон и матирует кожу.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Хэлси Глоу база%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 3, 
-        name: "Atomy Бальзам для Губ", 
-        price: 450, 
-        desc: "Бальзам для губ с витамином Е. Защищает от сухости и трещин.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Бальзам для Губ%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 4, 
-        name: "Atomy ББ крем", 
-        price: 800, 
-        desc: "BB-крем с уходовыми компонентами и лёгким покрытием. SPF 30.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy ББ крем%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 5, 
-        name: "Atomy Фэйм Питательный Крем", 
-        price: 1750, 
-        desc: "Питательный крем с коллагеном. Разглаживает морщины и придаёт упругость.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Фэйм Питательный Крем%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 6, 
-        name: "Atomy Дейли Маска Питание и Упругость", 
-        price: 1000, 
-        desc: "Одноразовая маска для интенсивного питания и укрепления кожи.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Дейли Маска%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 7, 
-        name: "Atomy Шампунь и гель для душа для мужчин", 
-        price: 1550, 
-        desc: "Шампунь и гель для душа в одном флаконе. Свежий цитрусовый аромат.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Шампунь и гель%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 8, 
-        name: "Atomy Абсолют СеллАктив Питательный крем", 
-        price: 3000, 
-        desc: "Питательный крем с экстрактом стволовых клеток. Восстанавливает и разглаживает кожу.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют СеллАктив%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 9, 
-        name: "Atomy Тушь Сила Объема", 
-        price: 1300, 
-        desc: "Тушь для ресниц с эффектом объёма. Не смазывается и не осыпается.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Тушь Сила Объема%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 10, 
-        name: "Atomy Морские патчи для глаз", 
-        price: 1550, 
-        desc: "Патчи для области вокруг глаз с экстрактом морских водорослей. Увлажняют и убирают отёки.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Морские патчи%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 11, 
-        name: "Atomy Ивнинг Кеар Очищение", 
-        price: 850, 
-        desc: "Глубоко очищает поры, регулирует выработку себума. Подходит для жирной и комбинированной кожи.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Ивнинг Кеар Очищение%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 12, 
-        name: "Atomy Ивнинг Кеар Набор", 
-        price: 3200, 
-        desc: "Набор для вечернего ухода: гель, пилинг и молочко. Глубоко очищает и увлажняет.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Ивнинг Кеар Набор%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 13, 
-        name: "Atomy Гидра Сияние Крем", 
-        price: 1750, 
-        desc: "Крем с гиалуроновой кислотой. Увлажняет и придаёт сияние.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Гидра Сияние Крем%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 14, 
-        name: "Atomy Нежная эко-пенка для умывания", 
-        price: 900, 
-        desc: "Эко-пенка для умывания с натуральными компонентами. Подходит для чувствительной кожи.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Нежная эко-пенка%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 15, 
-        name: "Atomy Дорожный Набор 6", 
-        price: 1000, 
-        desc: "Набор из 6 мини-продуктов для путешествий. Идеален для поездок.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Дорожный Набор 6%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 16, 
-        name: "Atomy Блеск для Губ", 
-        price: 1000, 
-        desc: "Блеск для губ с увлажняющими компонентами. Придаёт естественный блеск.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Блеск для Губ%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 17, 
-        name: "Atomy СеллАктив крем для кожи вокруг глаз", 
-        price: 3200, 
-        desc: "Крем для кожи вокруг глаз с пептидами. Уменьшает отёки и тёмные круги.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy СеллАктив крем для глаз%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 18, 
-        name: "Atomy Пилинг пэды", 
-        price: 1300, 
-        desc: "Пэды для химического пилинга. Удаляют ороговевшие клетки и выравнивают тон.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Пилинг пэды%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 19, 
-        name: "Atomy Солнцезащитный крем (тонирующий)", 
-        price: 800, 
-        desc: "Солнцезащитный крем с легким тонирующим эффектом. Защищает и выравнивает тон.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Солнцезащитный крем%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 20, 
-        name: "Atomy Центелла Гель для умывания", 
-        price: 1300, 
-        desc: "Гель для умывания с экстрактом центеллы. Успокаивает и снимает раздражение.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Центелла Гель%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 21, 
-        name: "Atomy СеллАктив Ампула", 
-        price: 3400, 
-        desc: "Ампульная сыворотка с ферментированными компонентами. Улучшает текстуру и тон кожи.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy СеллАктив Ампула%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 22, 
-        name: "Atomy Абсолют ВВ", 
-        price: 1550, 
-        desc: "BB-крем с уходовыми компонентами и SPF 30. Выравнивает тон и матирует кожу.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют ВВ%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 23, 
-        name: "Atomy Гидра Сияние Набор", 
-        price: 3400, 
-        desc: "Набор для глубокого увлажнения: тоник, эссенция и крем.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Гидра Сияние Набор%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 24, 
-        name: "Atomy Фэйм Крем для кожи вокруг глаз", 
-        price: 1750, 
-        desc: "Крем для кожи вокруг глаз с коллагеном. Уменьшает морщины и придаёт упругость.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Фэйм Крем для глаз%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 25, 
-        name: "Atomy Центелла Тонер", 
-        price: 1450, 
-        desc: "Тоник с экстрактом центеллы. Успокаивает и снимает раздражение.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Центелла Тонер%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 26, 
-        name: "Atomy Абсолют Солнцезащитная...", 
-        price: 1100, 
-        desc: "Солнцезащитный крем с SPF 50+. Не оставляет белого следа.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Солнцезащитная%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 27, 
-        name: "Atomy Дейли Маска Улучшающая цвет лица", 
-        price: 1000, 
-        desc: "Одноразовая маска для выравнивания тона и сияния кожи.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Дейли Маска%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 28, 
-        name: "Atomy Дейли Маска Увлажнение", 
-        price: 1000, 
-        desc: "Одноразовая маска для интенсивного увлажнения.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Дейли Маска Увлажнение%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 29, 
-        name: "Atomy Суперэнергия и Увлажнение для мужчин", 
-        price: 2000, 
-        desc: "Увлажняющий крем для мужской кожи. Подходит для ежедневного использования.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Суперэнергия%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 30, 
-        name: "Atomy Солнцезащитный крем", 
-        price: 800, 
-        desc: "Солнцезащитный крем с легким покрытием. Защищает от UVA/UVB-лучей.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Солнцезащитный крем%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 31, 
-        name: "Atomy Спрей мгновенной красоты", 
-        price: 1300, 
-        desc: "Спрей для мгновенного сияния кожи. Идеален перед выходом.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Спрей мгновенной красоты%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 32, 
-        name: "Atomy Крем-мист", 
-        price: 1450, 
-        desc: "Лёгкий крем-туман для увлажнения и сияния кожи.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Крем-мист%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 33, 
-        name: "Atomy Ивнинг Кеар Пилинг Гель", 
-        price: 850, 
-        desc: "Гель для пилинга с фруктовыми кислотами. Удаляет ороговевшие клетки.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Ивнинг Кеар Пилинг Гель%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 34, 
-        name: "Atomy Очищение для мужчин", 
-        price: 1000, 
-        desc: "Очищающее средство для мужчин. Удаляет загрязнения и жир.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Очищение для мужчин%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 35, 
-        name: "Atomy Абсолют сыворотка-мист", 
-        price: 2000, 
-        desc: "Сыворотка-мист с гиалуроновой кислотой. Интенсивно увлажняет и тонизирует.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют сыворотка-мист%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 36, 
-        name: "Аделика Цветной блеск для губ", 
-        price: 1100, 
-        desc: "Блеск для губ с эффектом цвета. Придаёт естественный блеск.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EАделика Цветной блеск%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 37, 
-        name: "Atomy Абсолют Гидра бальзам", 
-        price: 1750, 
-        desc: "Гидратирующий бальзам для сухой и чувствительной кожи. Быстро впитывается, не оставляя липкости.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра бальзам%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 38, 
-        name: "Atomy Абсолют Гидра крем", 
-        price: 1900, 
-        desc: "Крем с экстрактом центеллы. Успокаивает и восстанавливает кожу.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра крем%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 39, 
-        name: "Atomy Абсолют СеллАктив Ампула", 
-        price: 3400, 
-        desc: "Ампульная сыворотка с ферментированными компонентами. Улучшает текстуру и тон кожи.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют СеллАктив Ампула%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 40, 
-        name: "Atomy Абсолют СеллАктив Набор", 
-        price: 18000, 
-        desc: "Набор из 6 продуктов для полного ухода. Идеален для подарка.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют СеллАктив Набор%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 41, 
-        name: "Atomy Абсолют Гидра Сияние Крем", 
-        price: 1900, 
-        desc: "Крем с гиалуроновой кислотой. Увлажняет и придаёт сияние.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Сияние Крем%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 42, 
-        name: "Atomy Абсолют Гидра Тонер", 
-        price: 1450, 
-        desc: "Тоник с экстрактом центеллы. Успокаивает и снимает раздражение.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Тонер%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 43, 
-        name: "Atomy Абсолют Гидра Эссенция", 
-        price: 2000, 
-        desc: "Эссенция с гиалуроновой кислотой. Увлажняет и разглаживает морщины.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Эссенция%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 44, 
-        name: "Atomy Абсолют Гидра Крем для лица", 
-        price: 1900, 
-        desc: "Крем с экстрактом центеллы. Успокаивает и восстанавливает кожу.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Крем%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 45, 
-        name: "Atomy Абсолют Гидра Сыворотка", 
-        price: 2000, 
-        desc: "Сыворотка с гиалуроновой кислотой. Интенсивно увлажняет и тонизирует.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Сыворотка%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 46, 
-        name: "Atomy Абсолют Гидра Маска", 
-        price: 1000, 
-        desc: "Одноразовая маска для интенсивного увлажнения.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Маска%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 47, 
-        name: "Atomy Абсолют Гидра Пилинг", 
-        price: 1300, 
-        desc: "Пилинг с фруктовыми кислотами. Удаляет ороговевшие клетки и выравнивает тон.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Пилинг%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 48, 
-        name: "Atomy Абсолют Гидра Крем для тела", 
-        price: 1750, 
-        desc: "Крем для тела с экстрактом центеллы. Увлажняет и удерживает влагу.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Крем для тела%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 49, 
-        name: "Atomy Абсолют Гидра Лосьон", 
-        price: 1600, 
-        desc: "Лосьон для тела с гиалуроновой кислотой. Быстро впитывается, не оставляя липкости.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Лосьон%3C/text%3E%3C/svg%3E" 
-      },
-      { 
-        id: 50, 
-        name: "Atomy Абсолют Гидра Спрей", 
-        price: 1300, 
-        desc: "Спрей для мгновенного увлажнения. Идеален для использования в течение дня.", 
-        img: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'%3E%3Crect width='280' height='200' fill='%23ecf0f1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f8c8d' font-size='14'%3EAtomy Абсолют Гидра Спрей%3C/text%3E%3C/svg%3E" 
-      }
-    ];
-
-    // Корзина
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    // Функции
-    function addToCart(productId) {
-      const product = products.find(p => p.id === productId);
-      if (product) {
-        const existing = cart.find(item => item.id === productId);
-        if (existing) {
-          existing.quantity++;
-        } else {
-          cart.push({ ...product, quantity: 1 });
-        }
-        saveCart();
-        updateCartUI();
-      }
-    }
-
-    function removeFromCart(productId) {
-      cart = cart.filter(item => item.id !== productId);
-      saveCart();
-      updateCartUI();
-      renderCart();
-    }
-
-    function updateQuantity(productId, change) {
-      const item = cart.find(item => item.id === productId);
-      if (item) {
-        item.quantity += change;
-        if (item.quantity <= 0) {
-          removeFromCart(productId);
-        } else {
-          saveCart();
-          updateCartUI();
-          renderCart();
-        }
-      }
-    }
-
-    function saveCart() {
-      localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    function updateCartUI() {
-      document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-    }
-
-    function openCart() {
-      renderCart();
-      document.getElementById('cartModal').style.display = 'block';
-    }
-
-    function closeCart() {
-      document.getElementById('cartModal').style.display = 'none';
-    }
-
-    function renderCart() {
-      const cartItemsEl = document.getElementById('cartItems');
-      const totalPriceEl = document.getElementById('totalPrice');
-
-      if (cart.length === 0) {
-        cartItemsEl.innerHTML = '<p>Корзина пуста</p>';
-        totalPriceEl.textContent = '0';
-        return;
-      }
-
-      let html = '';
-      let total = 0;
-      cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        html += `
-          <div class="cart-item">
-            <div class="cart-item-info">
-              <strong>${item.name}</strong><br>
-              ${item.price} ₽ × ${item.quantity} = ${itemTotal} ₽
-            </div>
-            <div class="cart-item-actions">
-              <div class="cart-item-quantity">
-                <button onclick="updateQuantity(${item.id}, -1)">–</button>
-                <span>${item.quantity}</span>
-                <button onclick="updateQuantity(${item.id}, 1)">+</button>
-              </div>
-              <button class="cart-item-remove" onclick="removeFromCart(${item.id})">×</button>
-            </div>
-          </div>
-        `;
-      });
-
-      cartItemsEl.innerHTML = html;
-      totalPriceEl.textContent = total;
-    }
-
-    function placeOrder() {
-      if (cart.length === 0) {
-        alert("Корзина пуста!");
-        return;
-      }
-
-      const name = prompt("Введите ваше имя:");
-      const contact = prompt("Введите ваш телефон или Telegram (например, @username):");
-      
-      if (!name || !contact) {
-        alert("Имя и контакт обязательны для оформления заказа!");
-        return;
-      }
-
-      let orderText = "";
-      let total = 0;
-      cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        orderText += `${item.name} — ${item.quantity} шт × ${item.price} ₽ = ${itemTotal} ₽\n`;
-      });
-      orderText += `\nИтого: ${total} ₽`;
-
-      // Отправка на Formspree
-      fetch("https://formspree.io/f/mzddzbay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name,
-          contact: contact,
-          order: orderText,
-          total: total
-        })
-      })
-      .then(response => {
-        if (response.ok) {
-          alert("✅ Спасибо за заказ! Я скоро с вами свяжусь.");
-          cart = [];
-          saveCart();
-          updateCartUI();
-          closeCart();
-        } else {
-          alert("Ошибка отправки. Попробуйте позже.");
-        }
-      })
-      .catch(() => {
-        alert("Не удалось отправить заказ. Проверьте подключение к интернету.");
-      });
-    }
-
-    // Рендер товаров
-    function renderProducts() {
-      const container = document.getElementById('productList');
-      container.innerHTML = products.map(p => `
-        <div class="product" onclick="showProduct(${p.id})">
-          <img src="${p.img}" alt="${p.name}" style="width:100%; height:200px; object-fit:cover;">
-          <div class="product-info">
-            <h3>${p.name}</h3>
-            <div class="price">${p.price} ₽</div>
-            <button class="btn">Подробнее</button>
-          </div>
+    <!-- Шапка -->
+    <header>
+        <div class="container header-wrap">
+            <div class="logo">ATOMY PARTNER</div>
+            <a href="#register" class="nav-btn">Стать партнером</a>
         </div>
-      `).join('');
-    }
+    </header>
 
-    function showProduct(productId) {
-      const product = products.find(p => p.id === productId);
-      if (!product) return;
-
-      const productPage = document.getElementById('productPage');
-      const productList = document.getElementById('productList');
-      const backButton = document.getElementById('backButton');
-
-      productList.style.display = 'none';
-      productPage.style.display = 'block';
-      backButton.style.display = 'flex';
-
-      productPage.innerHTML = `
-        <div style="text-align: center;">
-          <img src="${product.img}" alt="${product.name}" style="max-width: 100%; max-height: 400px; object-fit: contain; margin-bottom: 20px;">
-          <h2>${product.name}</h2>
-          <div class="price">${product.price} ₽</div>
-          <p style="margin: 20px 0;">${product.desc}</p>
-          <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Добавить в корзину</button>
+    <!-- Главный экран -->
+    <section class="hero">
+        <div class="container">
+            <h1>Бизнес будущего с Atomy</h1>
+            <p>Зарегистрируйтесь бесплатно и получите доступ к качественной продукции корейского бренда без ежемесячных взносов.</p>
+            <a href="#register" class="cta-button">Начать регистрацию</a>
         </div>
-      `;
-    }
+    </section>
 
-    function goBackToCatalog() {
-      const productPage = document.getElementById('productPage');
-      const productList = document.getElementById('productList');
-      const backButton = document.getElementById('backButton');
+    <!-- Преимущества -->
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают Atomy?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🚀</div>
+                    <h3>Бесплатная регистрация</h3>                    <p>Никаких взносов, покупок обязательных наборов или ежемесячных платежей.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌍</div>
+                    <h3>Глобальный рынок</h3>
+                    <p>Возможность строить бизнес в разных странах мира с единым офисом.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💎</div>
+                    <h3>Качество продукции</h3>
+                    <p>Продукция премиум-класса по доступным ценам (Absolute Price).</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      productList.style.display = 'grid';
-      productPage.style.display = 'none';
-      backButton.style.display = 'none';
-    }
+    <!-- Секция регистрации -->
+    <section id="register" class="register-section">
+        <div class="container">
+            <div class="form-box">
+                <h2 style="margin-bottom: 20px;">Заполните форму</h2>
+                <p style="margin-bottom: 20px; color: #555;">Оставьте контакты, и я помогу вам с регистрацией</p>
+                
+                <!-- ВАЖНО: Здесь нужно настроить отправку формы -->
+                <!-- Вариант 1: Просто ссылка на официальную регистрацию -->
+                <!-- <a href="ВАША_РЕФЕРАЛЬНАЯ_ССЫЛКА" class="submit-btn" style="display:block; text-align:center;">Перейти на сайт регистрации</a> -->
 
-    // Инициализация
-    document.getElementById('cartIcon').addEventListener('click', openCart);
-    document.getElementById('backButton').addEventListener('click', goBackToCatalog);
-    renderProducts();
-    updateCartUI();
+                <!-- Вариант 2: Форма сбора заявок (требует backend или сервиса типа Formspree) -->
+                <form action="https://formspree.io/f/ВАШ_ID" method="POST">
+                    <input type="text" name="name" class="form-input" placeholder="Ваше имя" required>
+                    <input type="tel" name="phone" class="form-input" placeholder="Телефон / WhatsApp" required>
+                    <input type="email" name="email" class="form-input" placeholder="Email" required>
+                    <button type="submit" class="submit-btn">Отправить заявку</button>
+                </form>
 
-    window.onclick = function(event) {
-      const modal = document.getElementById('cartModal');
-      if (event.target === modal) closeCart();
-    }
-  </script>
-</body>
-      </html>
+                <p class="note">Нажимаю кнопку, вы соглашаетесь на обработку персональных данных.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <p>© 2023 Независимый партнер Atomy. Все права защищены.</p>
+            <p>Сайт не является официальным представительством компании Atomy Inc.</p>
+            <p>Контакты: <a href="https://wa.me/79000000000" style="color: #fff;">WhatsApp</a></p>
+        </div>
+    </footer>
+
+</body></html>
