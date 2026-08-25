@@ -20,6 +20,7 @@
             color: var(--text-color);
             margin: 0;
             padding: 15px;
+            padding-bottom: 100px; /* Отступ снизу, чтобы кнопка сохранения не перекрывала карточки */
         }
 
         h1 {
@@ -56,6 +57,7 @@
             font-size: 14px;
             transition: all 0.2s ease;
             text-align: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .day-btn small {
@@ -118,6 +120,7 @@
         .input-group {
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
         .input-group label {
@@ -126,6 +129,8 @@
             margin-bottom: 3px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            width: 100%;
+            text-align: center;
         }
 
         .input-group input {
@@ -136,8 +141,8 @@
             border-radius: 4px;
             font-size: 15px;
             text-align: center;
-            width: 80%;
-            margin: 0 auto;
+            width: 90%;
+            box-sizing: border-box;
         }
 
         .history-hint {
@@ -150,9 +155,11 @@
         }
 
         .save-btn {
-            position: sticky;
+            position: fixed;
             bottom: 15px;
-            width: 100%;
+            left: 15px;
+            right: 15px;
+            width: calc(100% - 30px);
             background-color: var(--success-color);
             color: white;
             border: none;
@@ -161,9 +168,9 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(40, 199, 111, 0.3);
-            z-index: 10;
+            box-shadow: 0 5px 15px rgba(40, 199, 111, 0.4);
+            z-index: 100;
+            box-sizing: border-box;
         }
 
         .save-btn:active {
@@ -191,7 +198,7 @@
     <button class="save-btn" onclick="saveCurrentWorkout()">💾 Сохранить тренировку</button>
 
 <script>
-    // Точная научно доказанная программа из первого ответа
+    // Научно доказанная программа тренировок
     const program = {
         "пн": {
             title: "Понедельник: Весь верх тела (Объемная)",
@@ -255,7 +262,7 @@
     let currentDay = 'пн';
     let workoutHistory = JSON.parse(localStorage.getItem('workoutHistory')) || {};
 
-    // Функция отрисовки упражнений выбранного дня
+    // Отрисовка карточек упражнений
     function renderWorkout(day) {
         const container = document.getElementById('workout-container');
         const data = program[day];
@@ -274,8 +281,6 @@
             `;
             
             const exHistory = workoutHistory[ex.id] || [];
-
-            // Для планки/вакуума меняем подписи на Секунды вместо Повторов
             const isTimeBased = ex.name.includes("Планка") || ex.name.includes("Вакуум");
             const repsLabel = isTimeBased ? "Сек" : "Повторы";
 
@@ -283,9 +288,3 @@
                 const pastSet = exHistory[i - 1];
                 let hintText = 'Было: —';
                 if (pastSet) {
-                    hintText = isTimeBased ? `Было: ${pastSet.reps} сек` : `Было: ${pastSet.weight}кг × ${pastSet.reps}`;
-                }
-
-                html += `
-                    <div class="set-row" data-set-num="${i}">
-                        <div class="set-number">${i}</div>
