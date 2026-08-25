@@ -1,375 +1,289 @@
-// client/src/components/FrictionModal.tsx
-import React, { useState, useEffect } from 'react';
-import { Practice } from '../data/practices'; // Тип практики
-import { getRandomPractice } from '../utils/practices'; // Функция выбора практики
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дневник Тренировок 6-Дней</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #00adb5;
+            --text-color: #eeeeee;
+            --text-muted: #888888;
+            --success-color: #393e46;
+        }
 
-interface FrictionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onChoosePractice: (practice: Practice) => void;
-  targetUrl: string; // URL, на который пользователь пытался перейти
-  countdownSeconds?: number; // Время паузы перед возможностью продолжить
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+        }
 
-const FrictionModal: React.FC<FrictionModalProps> = ({
-  isOpen,
-  onClose,
-  onChoosePractice,
-  targetUrl,
-  countdownSeconds = 10 // По умолчанию 10 секунд
-}) => {
-  const [timeLeft, setTimeLeft] = useState(countdownSeconds);
-  const [selectedPractice, setSelectedPractice] = useState<Practice | null>(null);
+        h1, h2, h3 {
+            margin: 0 0 10px 0;
+        }
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-    if (isOpen && timeLeft > 0) {
-      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-    } else if (timeLeft === 0) {
-      // Пауза закончилась, можно продолжить
-      // Но мы не закрываем модальное окно, а предлагаем практику
-      // setTimeLeft(countdownSeconds); // Сбросить таймер, если нужно повторить?
-    }
-    return () => { if (timer) clearTimeout(timer); };
-  }, [isOpen, timeLeft]);
+        .days-nav {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-  useEffect(() => {
-    if (isOpen) {
-      setTimeLeft(countdownSeconds);
-      setSelectedPractice(getRandomPractice());
-    }
-  }, [isOpen, countdownSeconds]);
+        .day-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 2px solid #333;
+            padding: 12px 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
 
-  if (!isOpen || !selectedPractice) return null;
+        .day-btn.active {
+            background-color: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+        }
 
-  // --- Реализация функции 3: Механизм «трения» ---
-  // --- Реализация функции 4: Библиотека краткосрочных практик ---
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">Замедлимся?</h2>        <p className="text-gray-600">
-          Вы собирались открыть <span className="font-medium">{targetUrl}</span>.
-        </p>
-        <p className="text-gray-600">
-          Это хороший выбор прямо сейчас?
-        </p>
+        .workout-section {
+            display: none;
+        }
 
-        {/* --- Реализация функции 3: Таймер обратного отсчета --- */}
-        {timeLeft > 0 ? (
-          <div className="mt-4 text-center">
-            <p className="text-gray-500">Подождите {timeLeft} секунд...</p>
-          </div>
-        ) : (
-          <>
-            <div className="mt-4">
-              <button
-                onClick={() => onChoosePractice(selectedPractice)}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors duration-200"
-                disabled={timeLeft > 0} // Кнопка активна только после паузы
-              >
-                Выбрать практику вместо этого
-              </button>
-            </div>
-            <div className="flex justify-between mt-4">
-              <button
-                onClick={onClose}
-                className="text-gray-500 hover:text-gray-700"
-                disabled={timeLeft > 0}
-              >
-                Продолжить (после паузы)
-              </button>
-            </div>
-          </>
-        )}
-      </div>
+        .workout-section.active {
+            display: block;
+        }
+
+        .exercise-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .exercise-header {
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .exercise-title {
+            font-size: 18px;
+            color: var(--accent-color);
+        }
+
+        .set-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            background: #252525;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .set-number {
+            font-weight: bold;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .input-group input {
+            background: #333;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .history-hint {
+            font-size: 11px;
+            color: #ff9f43;
+            margin-top: 2px;
+            min-height: 14px;
+        }
+
+        .save-btn {
+            width: 100%;
+            background-color: #28c76f;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .save-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏋️‍♂️ Мой Тренировочный Дневник</h1>
+    
+    <!-- Навигация по 6 дням недели -->
+    <div class="days-nav">
+        <button class="day-btn active" onclick="switchDay('пн')">ПН<br><small>Верх</small></button>
+        <button class="day-btn" onclick="switchDay('вт')">ВТ<br><small>Низ</small></button>
+        <button class="day-btn" onclick="switchDay('ср')">СР<br><small>Грудь/Пл</small></button>
+        <button class="day-btn" onclick="switchDay('чт')">ЧТ<br><small>Спина</small></button>
+        <button class="day-btn" onclick="switchDay('пт')">ПТ<br><small>Руки</small></button>
+        <button class="day-btn" onclick="switchDay('сб')">СБ<br><small>Низ/Пл</small></button>
     </div>
-  );
-};
 
-export default FrictionModal;
+    <!-- Контейнер, куда скрипт сам добавит упражнения -->
+    <div id="workout-container"></div>
 
-// client/src/data/practices.ts
-// --- Реализация функции 4: Библиотека краткосрочных практик ---
+    <button class="save-btn" onclick="saveCurrentWorkout()">💾 Сохранить Тренировку</button>
 
-export interface Practice {
-  id: string;
-  title: string;
-  description: string;
-  category: 'mindfulness' | 'reflection' | 'breathing' | 'cpt';
-  duration: 'short' | 'medium'; // 2-3 мин, 4-5 мин}
+<script>
+    // База данных вашей 6-дневной программы с акцентами (упражнения и количество подходов)
+    const program = {
+        "пн": {
+            title: "Понедельник: Весь верх тела",
+            exercises: [
+                { id: "p1", name: "Жим гантелей на наклонной скамье (30°)", sets: 3 },
+                { id: "p2", name: "Тяга верхнего блока узким паралл. хватом", sets: 3 },
+                { id: "p3", name: "Отжимания на брусьях (с весом)", sets: 3 },
+                { id: "p4", name: "Тяга гантели к поясу в упоре", sets: 3 },
+                { id: "p5", name: "Махи гантелями в стороны", sets: 4 },
+                { id: "p6", name: "Сгибания на бицепс на наклонной скамье", sets: 3 }
+            ]
+        },
+        "вт": {
+            title: "Вторник: Весь низ тела",
+            exercises: [
+                { id: "v1", name: "Приседания со штангой (или в Смите)", sets: 3 },
+                { id: "v2", name: "Румынская тяга", sets: 3 },
+                { id: "v3", name: "Выпады назад (на месте)", sets: 2 },
+                { id: "v4", name: "Подъемы на носки", sets: 3 }
+            ]
+        },
+        "ср": {
+            title: "Среда: Грудь и Плечи (Акцент: верх и ширина)",
+            exercises: [
+                { id: "s1", name: "Жим штанги на наклонной скамье в Смите", sets: 3 },
+                { id: "s2", name: "Сведения в кроссовере снизу вверх", sets: 3 },
+                { id: "s3", name: "Махи через стороны на нижнем блоке", sets: 4 },
+                { id: "s4", name: "Разведения рук назад в тренажере (пег-дек)", sets: 3 }
+            ]
+        },
+        "чт": {
+            title: "Четверг: Спина (Акцент: широчайшие и толщина)",
+            exercises: [
+                { id: "c1", name: "Тяга Т-грифа или рычажная тяга", sets: 3 },
+                { id: "c2", name: "Тяга верхнего блока к груди широким хватом", sets: 3 },
+                { id: "c3", name: "Пуловер на верхнем блоке с канатом", sets: 3 },
+                { id: "c4", name: "Шраги с гантелями", sets: 2 }
+            ]
+        },
+        "пт": {
+            title: "Пятница: Руки",
+            exercises: [
+                { id: "pt1", name: "Французский жим с EZ-грифом лежа", sets: 3 },
+                { id: "pt2", name: "Подъемы штанги на бицепс на скамье Скотта", sets: 3 },
+                { id: "pt3", name: "Разгибания на трицепс на блоке с канатом", sets: 3 },
+                { id: "pt4", name: "Сгибания «Молот» с гантелями", sets: 3 }
+            ]
+        },
+        "сб": {
+            title: "Суббота: Ноги, Плечи, Кор",
+            exercises: [
+                { id: "sb1", name: "Жим ногами в платформе", sets: 3 },
+                { id: "sb2", name: "Сгибания ног в тренажере", sets: 3 },
+                { id: "sb3", name: "Махи гантелями в стороны стоя", sets: 4 },
+                { id: "sb4", name: "Скручивания на пресс «Молитва»", sets: 3 }
+            ]
+        }
+    };
 
-export const practices: Practice[] = [
-  {
-    id: 'mindful_breath_1',
-    title: 'Осознанное    description: 'Сделайте 10 глубоких вдохов, сосредоточившись на ощущениях воздуха.',
-    category: 'breathing',
-    duration: 'short',
-  },
-  {
-    id: 'body_scan_1',
-    title: 'Сканирование тела',
-    description: 'Постепенно «просканируйте» свое тело от головы до ног, замечая любые напряжения.',
-    category: 'mindfulness',
-    duration: 'medium',
-  },
-  {
-    id: 'gratitude_log_1',
-    title: 'Дневник благодарности',
-    description: 'Запишите три вещи, за которые вы благодарны сегодня.',
-    category: 'reflection',
-    duration: 'short',
-  },
-  {
-    id: 'cpt_thought_challenge_1',
-    title: 'Вызов мысли',
-    description: 'Задайте себе: "Правда ли это? Что еще может быть правдой?"',
-    category: 'cpt',
-    duration: 'short',
-  },
-  // ... добавьте больше практик
-];
+    let currentDay = 'пн';
+    // Структура истории: { exerciseId: [ {set1_weight, set1_reps}, ... ] }
+    let workoutHistory = JSON.parse(localStorage.getItem('workoutHistory')) || {};
 
-// extension/src/background.ts
-import { BlockRule } from '../types';
+    // Отрисовка интерфейса под выбранный день
+    function renderWorkout(day) {
+        const container = document.getElementById('workout-container');
+        const data = program[day];
+        
+        let html = `<h2>${data.title}</h2>`;
+        
+        data.exercises.forEach(ex => {
+            html += `
+                <div class="exercise-card" data-ex-id="${ex.id}">
+                    <div class="exercise-header">
+                        <div class="exercise-title">${ex.name}</div>
+                    </div>
+                    <div class="sets-list">
+            `;
+            
+            // Получаем историю конкретно для этого упражнения
+            const exHistory = workoutHistory[ex.id] || [];
 
-// --- Реализация функции 2: Управляемая блокировка через браузерное расширение ---
-// --- Реализация функции 3: Механизм «трения» (пауза и подтверждение) ---
+            for (let i = 1; i <= ex.sets; i++) {
+                // Ищем данные по подходу с прошлой тренировки
+                const pastSet = exHistory[i - 1];
+                const hintText = pastSet ? `Было: ${pastSet.weight}кг × ${pastSet.reps}` : 'Было: —';
 
-// --- Реализация функции 1: Автоматический трекинг и аналитический дашборд ---
-// Локальное хранение истории для анализа
-const HISTORY_KEY = 'usage_history';
-const BLOCKS_KEY = 'blocked_hosts';
-
-let activeBlocks: string[] = [];
-
-// Загрузка заблокированных хостов из хранилища
-async function loadBlocks() {
-  const stored = await chrome.storage.local.get([BLOCKS_KEY]);
-  activeBlocks = stored[BLOCKS_KEY] || [];  console.log('Loaded blocks:', activeBlocks);
-  updateBlockRules(); // Обновить правила DNR при загрузке
-}
-
-// Обновление правил DNR на основе активных блокировок
-function updateBlockRules() {
-  // Удаляем старые правила (ID нужно отслеживать)
-  // Добавляем новые правила для активных блоков
-  const rulesToApply = activeBlocks.map((pattern, index) => ({
-    id: 1000 + index, // ID > 1000, чтобы не конфликтовать с системными
-    priority: 1,
-    action: {
-      type: 'redirect',
-      redirect: {
-        url: chromefriction-modal.html') // Переадресация на локальную страницу трения
-      }
-    },
-    condition: {
-      urlFilter: pattern,
-      resourceTypes: ['main_frame'] // Только для загрузки основной страницы
+                html += `
+                    <div class="set-row" data-set-num="${i}">
+                        <div class="set-number">${i}</div>
+                        <div class="input-group">
+                            <label>Вес (кг)</label>
+                            <input type="number" class="weight-input" placeholder="0" step="0.5">
+                            <div class="history-hint">${hintText}</div>
+                        </div>
+                        <div class="input-group">
+                            <label>Повторы</label>
+                            <input type="number" class="reps-input" placeholder="0">
+                            <div class="history-hint"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += `</div></div>`;
+        });
+        
+        container.innerHTML = html;
     }
-  }));
 
-  chrome.declarativeNetRequest.updateSessionRules({
-    removeRuleIds: Array.from({ length: activeBlocks.length }, (_, i) => 1000 + i),
-    addRules: rulesToApply
-  }).catch(err => console.error('Error updating DNR rules:', err));
-}
-
-// --- Реализация функции 2: Таймер блокировки ---
-// Управление таймерами через chrome.alarms
-async function setTemporaryBlock(hostPattern: string, durationMinutes: number) {
-  // Добавить хост в список временных блокировок
-  // Установить alarm на указанное время
-  const alarmName = `temp_block_${hostPattern}`;
-  chrome.alarms.create(alarmName, { delayInMinutes: durationMinutes });
-
-  // Для примера, временно добавим в активные блоки (в реальности нужно хранить отдельно)
-  if (!activeBlocks.includes(hostPattern)) {
-    activeBlocks.push(hostPattern);
-    await chrome.storage.local.set({ [BLOCKS_KEY]: activeBlocks });
-    updateBlockRules();
-  }
-
-  console.log(`Set temporary block for ${hostPattern} for ${durationMinutes} minutes.`);
-}
-
-// Обработчик срабатывания alarm
-chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (alarm.name.startsWith('temp_block_')) {    const hostToRemove = alarm.name.replace('temp_block_', '');
-    console.log(`Removing temporary block for ${hostToRemove}`);
-    // Удалить хост из списка активных блокировок
-    activeBlocks = activeBlocks.filter(h => h !== hostToRemove);
-    await chrome.storage.local.set({ [BLOCKS_KEY]: activeBlocks });
-    updateBlockRules(); // Обновить правила
-  }
-});
-
-// --- Реализация функции 1: Трекинг ---
-// Простой трекинг посещений (в реальности можно усложнить с таймерами)
-chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  const tab = await chrome.tabs.get(activeInfo.tabId);
-  if (tab.url) {
-    const hostname = new URL(tab.url).hostname;
-    console.log(`Visited: ${hostname}`);
-
-    // Локальное хранение истории (для PWA)
-    const history = await chrome.storage.local.get([HISTORY_KEY]).then(res => res[HISTORY_KEY] || []);
-    history.push({ url: tab.url, timestamp: Date.now() });
-    // Ротация данных (удаляем старые записи)
-    const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-    const recentHistory = history.filter((entry: any) => entry.timestamp > oneWeekAgo);
-    await chrome.storage.local.set({ [HISTORY_KEY]: recentHistory });
-  }
-});
-
-// --- Инициализация ---
-loadBlocks();
-
-// --- API для PWA ---
-// Позволяет PWA управлять настройками расширения через chrome.runtime.sendMessage
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'updateBlocks') {
-    activeBlocks = request.data;
-    chrome.storage.local.set({ [BLOCKS_KEY]: activeBlocks });
-    updateBlockRules();
-    sendResponse({ success: true });
-  } else if (request.action === 'setTemporaryBlock') {
-    setTemporaryBlock(request.host, request.duration);
-    sendResponse({ success: true });
-  }
-  return true; // Keep the message channel open for async response
-});
-
-// client/vite.config.ts
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'], // Кэшировать статику
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/your-api\.com\/.*$/,
-            handler: 'NetworkFirst', // Попробовать сеть, потом кэш
-            options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24, // 1 день
-              },
-            },
-          },
-        ],
-      },
-      manifest: {
-        name: 'Digital Wellbeing Assistant',
-        short_name: 'Wellbeing',
-        description: 'Helps manage digital wellbeing and reduce phone dependency.',
-        theme_color: '#ffffff',
-        icons: [
-          {
-            src: '/pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: '/pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-        ],
-      },
-    }),
-  ],
-  build: {
-    outDir: '../extension/dist/client', // Поместить сборку в папку расширения
-  },
-})
-
-// db_schema.sql
--- Реализация функции 1: Автоматический трекинг и аналитический дашборд
--- Хранение пользовательских данных и агрегированных метрикCREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    firebase_uid VARCHAR(255) UNIQUE NOT NULL, -- UID из Firebase Auth
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Сессии использования (агрегированные данные за день)
-CREATE TABLE usage_sessions (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    date DATE NOT NULL,
-    total_time_social FLOAT, -- Время в секундах
-    total_time_news FLOAT,
-    total_time_video FLOAT,
-    -- ... другие категории
-    UNIQUE(user_id, date) -- Один сеанс на пользователя в день
-);
-
--- Настройки блокировок пользователя (функция 2)
-CREATE TABLE blocks (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    host_pattern VARCHAR(255) NOT NULL, -- e.g., "*://*.facebook.com/*"
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Прогресс в практиках (функция 4, 5, 7)
-CREATE TABLE practice_logs (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    practice_id VARCHAR(100) NOT NULL, -- ID из библиотеки практик
-    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Прогресс в streaks (функция 7)
-CREATE TABLE streaks (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    current_streak INTEGER DEFAULT 0,
-    longest_streak INTEGER DEFAULT 0,
-    last_completed_date DATE
-);
-
-// extension/manifest.json
-{
-  "manifest_version": 3,
-  "name": "Digital Wellbeing Assistant",
-  "version": "1.0.0",
-  "description": "Helps manage digital wellbeing and reduce phone dependency.",  "permissions": [
-    "storage", // Для хранения настроек и кэша
-    "alarms", // Для таймеровокировки
-    "declarativeNetRequest", // Для перехвата запросов
-    "activeTab" // Для доступа к активной вкладке (опционально)
-  ],
-  "host_permissions": [
-    "<all_urls>" // Требуется для declarativeNetRequest
-  ],
-  "background": {
-    "service_worker": "background.js",
-    "type": "module"
-  },
-  "action": {
-    "default_popup": "dist/popup/index.html"
-  },
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "ruleset_1",
-        "enabled": true,
-        "path": "rules.json" // Путь к правилам блокировки
-      }
-    ]
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["friction-modal.html"], // Путь к локальной странице трения
-      "matches": ["<all_urls>"]
+    // Переключение вкладок дней недели
+    function switchDay(day) {
+        currentDay = day;
+        document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        renderWorkout(day);
     }
-  ]
-}
+
+    // Сохранение весов текущего дня
+    function saveCurrentWorkout() {
+        const cards = document.querySelectorAll('.exercise-card');
+        
+        cards.forEach(card => {
+            const exId = card.getAttribute('data-ex-id');
