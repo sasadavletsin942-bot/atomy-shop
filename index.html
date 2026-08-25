@@ -2,25 +2,15 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Дневник Тренировок 6-Дней</title>
     <style>
-        :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --accent-color: #00adb5;
-            --text-color: #eeeeee;
-            --text-muted: #888888;
-            --success-color: #28c76f;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #121212;
+            color: #eeeeee;
             margin: 0;
-            padding: 15px;
-            padding-bottom: 100px; /* Отступ снизу, чтобы кнопка сохранения не перекрывала карточки */
+            padding: 15px 15px 100px 15px;
         }
 
         h1 {
@@ -35,7 +25,7 @@
             color: #fff;
             margin-top: 10px;
             margin-bottom: 15px;
-            border-left: 4px solid var(--accent-color);
+            border-left: 4px solid #00adb5;
             padding-left: 10px;
         }
 
@@ -47,15 +37,14 @@
         }
 
         .day-btn {
-            background-color: var(--card-bg);
-            color: var(--text-color);
+            background-color: #1e1e1e;
+            color: #eeeeee;
             border: 2px solid #333;
             padding: 12px 5px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             font-size: 14px;
-            transition: all 0.2s ease;
             text-align: center;
             -webkit-tap-highlight-color: transparent;
         }
@@ -63,23 +52,23 @@
         .day-btn small {
             display: block;
             font-size: 10px;
-            color: var(--text-muted);
+            color: #888888;
             font-weight: normal;
             margin-top: 2px;
         }
 
         .day-btn.active {
-            background-color: var(--accent-color);
-            color: #000;
-            border-color: var(--accent-color);
+            background-color: #00adb5;
+            color: #000000;
+            border-color: #00adb5;
         }
 
         .day-btn.active small {
-            color: #222;
+            color: #222222;
         }
 
         .exercise-card {
-            background-color: var(--card-bg);
+            background-color: #1e1e1e;
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 15px;
@@ -95,7 +84,7 @@
         .exercise-title {
             font-size: 16px;
             font-weight: bold;
-            color: var(--accent-color);
+            color: #00adb5;
             line-height: 1.3;
         }
 
@@ -125,7 +114,7 @@
 
         .input-group label {
             font-size: 10px;
-            color: var(--text-muted);
+            color: #888888;
             margin-bottom: 3px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -160,7 +149,7 @@
             left: 15px;
             right: 15px;
             width: calc(100% - 30px);
-            background-color: var(--success-color);
+            background-color: #28c76f;
             color: white;
             border: none;
             padding: 15px;
@@ -172,17 +161,12 @@
             z-index: 100;
             box-sizing: border-box;
         }
-
-        .save-btn:active {
-            transform: scale(0.98);
-        }
     </style>
 </head>
 <body>
 
     <h1>🏋️‍♂️ Мой Тренировочный Дневник</h1>
     
-    <!-- Навигация по 6 дням недели -->
     <div class="days-nav">
         <button class="day-btn active" id="btn-пн" onclick="switchDay('пн')">ПН<small>Верх тела</small></button>
         <button class="day-btn" id="btn-вт" onclick="switchDay('вт')">ВТ<small>Низ тела</small></button>
@@ -192,14 +176,12 @@
         <button class="day-btn" id="btn-сб" onclick="switchDay('сб')">СБ<small>Ноги/Пл/Кор</small></button>
     </div>
 
-    <!-- Сюда подгружаются упражнения -->
     <div id="workout-container"></div>
 
     <button class="save-btn" onclick="saveCurrentWorkout()">💾 Сохранить тренировку</button>
 
 <script>
-    // Научно доказанная программа тренировок
-    const program = {
+    var program = {
         "пн": {
             title: "Понедельник: Весь верх тела (Объемная)",
             exercises: [
@@ -259,32 +241,45 @@
         }
     };
 
-    let currentDay = 'пн';
-    let workoutHistory = JSON.parse(localStorage.getItem('workoutHistory')) || {};
+    var currentDay = 'пн';
+    var workoutHistory = {};
+    
+    try {
+        var savedHistory = localStorage.getItem('workoutHistory');
+        if (savedHistory) {
+            workoutHistory = JSON.parse(savedHistory);
+        }
+    } catch (e) {
+        console.log("Ошибка чтения localStorage");
+    }
 
-    // Отрисовка карточек упражнений
     function renderWorkout(day) {
-        const container = document.getElementById('workout-container');
-        const data = program[day];
-        
+        var container = document.getElementById('workout-container');
+        var data = program[day];
         if (!data) return;
 
-        let html = `<h2>${data.title}</h2>`;
+        var html = '<h2>' + data.title + '</h2>';
         
-        data.exercises.forEach(ex => {
-            html += `
-                <div class="exercise-card" data-ex-id="${ex.id}">
-                    <div class="exercise-header">
-                        <div class="exercise-title">${ex.name}</div>
-                    </div>
-                    <div class="sets-list">
-            `;
+        for (var i = 0; i < data.exercises.length; i++) {
+            var ex = data.exercises[i];
+            html += '<div class="exercise-card" data-ex-id="' + ex.id + '">' +
+                        '<div class="exercise-header">' +
+                            '<div class="exercise-title">' + ex.name + '</div>' +
+                        '</div>' +
+                        '<div class="sets-list">';
             
-            const exHistory = workoutHistory[ex.id] || [];
-            const isTimeBased = ex.name.includes("Планка") || ex.name.includes("Вакуум");
-            const repsLabel = isTimeBased ? "Сек" : "Повторы";
+            var exHistory = workoutHistory[ex.id] || [];
+            var isTimeBased = ex.name.indexOf("Планка") !== -1 || ex.name.indexOf("Вакуум") !== -1;
+            var repsLabel = isTimeBased ? "Сек" : "Повторы";
 
-            for (let i = 1; i <= ex.sets; i++) {
-                const pastSet = exHistory[i - 1];
-                let hintText = 'Было: —';
+            for (var j = 1; j <= ex.sets; j++) {
+                var pastSet = exHistory[j - 1];
+                var hintText = 'Было: —';
                 if (pastSet) {
+                    hintText = isTimeBased ? 'Было: ' + pastSet.reps + ' сек' : 'Было: ' + pastSet.weight + 'кг × ' + pastSet.reps;
+                }
+
+                html += '<div class="set-row" data-set-num="' + j + '">' +
+                            '<div class="set-number">' + j + '</div>' +
+                            '<div class="input-group">' +
+                                '<label>' + (isTimeBased ? "Сет" : "Вес (кг)") + '</label>' +
