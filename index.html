@@ -11,26 +11,38 @@
             --accent-color: #00adb5;
             --text-color: #eeeeee;
             --text-muted: #888888;
-            --success-color: #393e46;
+            --success-color: #28c76f;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
             padding: 15px;
         }
 
-        h1, h2, h3 {
-            margin: 0 0 10px 0;
+        h1 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #fff;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 10px;
         }
 
         .days-nav {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .day-btn {
@@ -43,6 +55,15 @@
             font-weight: bold;
             font-size: 14px;
             transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .day-btn small {
+            display: block;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: normal;
+            margin-top: 2px;
         }
 
         .day-btn.active {
@@ -51,12 +72,8 @@
             border-color: var(--accent-color);
         }
 
-        .workout-section {
-            display: none;
-        }
-
-        .workout-section.active {
-            display: block;
+        .day-btn.active small {
+            color: #222;
         }
 
         .exercise-card {
@@ -74,13 +91,15 @@
         }
 
         .exercise-title {
-            font-size: 18px;
+            font-size: 16px;
+            font-weight: bold;
             color: var(--accent-color);
+            line-height: 1.3;
         }
 
         .set-row {
             display: grid;
-            grid-template-columns: 40px 1fr 1fr;
+            grid-template-columns: 30px 1fr 1fr;
             gap: 10px;
             align-items: center;
             margin-bottom: 10px;
@@ -91,8 +110,9 @@
 
         .set-number {
             font-weight: bold;
-            color: var(--text-muted);
+            color: #fff;
             text-align: center;
+            font-size: 16px;
         }
 
         .input-group {
@@ -101,40 +121,49 @@
         }
 
         .input-group label {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
-            margin-bottom: 2px;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .input-group input {
             background: #333;
             border: 1px solid #444;
             color: #fff;
-            padding: 6px;
+            padding: 8px 5px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 15px;
             text-align: center;
+            width: 80%;
+            margin: 0 auto;
         }
 
         .history-hint {
             font-size: 11px;
             color: #ff9f43;
-            margin-top: 2px;
+            margin-top: 4px;
+            text-align: center;
             min-height: 14px;
+            font-weight: 500;
         }
 
         .save-btn {
+            position: sticky;
+            bottom: 15px;
             width: 100%;
-            background-color: #28c76f;
+            background-color: var(--success-color);
             color: white;
             border: none;
-            padding: 12px;
+            padding: 15px;
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(40, 199, 111, 0.3);
+            z-index: 10;
         }
 
         .save-btn:active {
@@ -148,57 +177,57 @@
     
     <!-- Навигация по 6 дням недели -->
     <div class="days-nav">
-        <button class="day-btn active" onclick="switchDay('пн')">ПН<br><small>Верх</small></button>
-        <button class="day-btn" onclick="switchDay('вт')">ВТ<br><small>Низ</small></button>
-        <button class="day-btn" onclick="switchDay('ср')">СР<br><small>Грудь/Пл</small></button>
-        <button class="day-btn" onclick="switchDay('чт')">ЧТ<br><small>Спина</small></button>
-        <button class="day-btn" onclick="switchDay('пт')">ПТ<br><small>Руки</small></button>
-        <button class="day-btn" onclick="switchDay('сб')">СБ<br><small>Низ/Пл</small></button>
+        <button class="day-btn active" id="btn-пн" onclick="switchDay('пн')">ПН<small>Верх тела</small></button>
+        <button class="day-btn" id="btn-вт" onclick="switchDay('вт')">ВТ<small>Низ тела</small></button>
+        <button class="day-btn" id="btn-ср" onclick="switchDay('ср')">СР<small>Грудь/Плечи</small></button>
+        <button class="day-btn" id="btn-чт" onclick="switchDay('чт')">ЧТ<small>Спина</small></button>
+        <button class="day-btn" id="btn-пт" onclick="switchDay('пт')">ПТ<small>Руки</small></button>
+        <button class="day-btn" id="btn-сб" onclick="switchDay('сб')">СБ<small>Ноги/Пл/Кор</small></button>
     </div>
 
-    <!-- Контейнер, куда скрипт сам добавит упражнения -->
+    <!-- Сюда подгружаются упражнения -->
     <div id="workout-container"></div>
 
-    <button class="save-btn" onclick="saveCurrentWorkout()">💾 Сохранить Тренировку</button>
+    <button class="save-btn" onclick="saveCurrentWorkout()">💾 Сохранить тренировку</button>
 
 <script>
-    // База данных вашей 6-дневной программы с акцентами (упражнения и количество подходов)
+    // Точная научно доказанная программа из первого ответа
     const program = {
         "пн": {
-            title: "Понедельник: Весь верх тела",
+            title: "Понедельник: Весь верх тела (Объемная)",
             exercises: [
                 { id: "p1", name: "Жим гантелей на наклонной скамье (30°)", sets: 3 },
-                { id: "p2", name: "Тяга верхнего блока узким паралл. хватом", sets: 3 },
+                { id: "p2", name: "Тяга верхнего блока узким параллельным хватом", sets: 3 },
                 { id: "p3", name: "Отжимания на брусьях (с весом)", sets: 3 },
-                { id: "p4", name: "Тяга гантели к поясу в упоре", sets: 3 },
-                { id: "p5", name: "Махи гантелями в стороны", sets: 4 },
-                { id: "p6", name: "Сгибания на бицепс на наклонной скамье", sets: 3 }
+                { id: "p4", name: "Тяга гантели к поясу в упоре (на толщину)", sets: 3 },
+                { id: "p5", name: "Махи гантелями в стороны (на ширину)", sets: 4 },
+                { id: "p6", name: "Сгибания на бицепс с гантелями на наклонной скамье", sets: 3 }
             ]
         },
         "вт": {
             title: "Вторник: Весь низ тела",
             exercises: [
-                { id: "v1", name: "Приседания со штангой (или в Смите)", sets: 3 },
-                { id: "v2", name: "Румынская тяга", sets: 3 },
-                { id: "v3", name: "Выпады назад (на месте)", sets: 2 },
-                { id: "v4", name: "Подъемы на носки", sets: 3 }
+                { id: "v1", name: "Приседания со штангой на спине (или в Смите)", sets: 3 },
+                { id: "v2", name: "Румынская тяга со штангой или гантелями", sets: 3 },
+                { id: "v3", name: "Выпады назад в движении или на месте", sets: 2 },
+                { id: "v4", name: "Подъемы на носки сидя или стоя", sets: 3 }
             ]
         },
         "ср": {
-            title: "Среда: Грудь и Плечи (Акцент: верх и ширина)",
+            title: "Среда: Грудь и Плечи (Акцент: Верх и Ширина)",
             exercises: [
                 { id: "s1", name: "Жим штанги на наклонной скамье в Смите", sets: 3 },
                 { id: "s2", name: "Сведения в кроссовере снизу вверх", sets: 3 },
-                { id: "s3", name: "Махи через стороны на нижнем блоке", sets: 4 },
+                { id: "s3", name: "Махи через стороны на нижнем блоке (в кроссовере)", sets: 4 },
                 { id: "s4", name: "Разведения рук назад в тренажере (пег-дек)", sets: 3 }
             ]
         },
         "чт": {
-            title: "Четверг: Спина (Акцент: широчайшие и толщина)",
+            title: "Четверг: Спина (Акцент: Широчайшие и Толщина)",
             exercises: [
-                { id: "c1", name: "Тяга Т-грифа или рычажная тяга", sets: 3 },
+                { id: "c1", name: "Тяга Т-грифа или рычажная тяга на толщину", sets: 3 },
                 { id: "c2", name: "Тяга верхнего блока к груди широким хватом", sets: 3 },
-                { id: "c3", name: "Пуловер на верхнем блоке с канатом", sets: 3 },
+                { id: "c3", name: "Пуловер на верхнем блоке с канатной рукоятью", sets: 3 },
                 { id: "c4", name: "Шраги с гантелями", sets: 2 }
             ]
         },
@@ -215,22 +244,24 @@
             title: "Суббота: Ноги, Плечи, Кор",
             exercises: [
                 { id: "sb1", name: "Жим ногами в платформе", sets: 3 },
-                { id: "sb2", name: "Сгибания ног в тренажере", sets: 3 },
+                { id: "sb2", name: "Сгибания ног в тренажере сидя или лежа", sets: 3 },
                 { id: "sb3", name: "Махи гантелями в стороны стоя", sets: 4 },
-                { id: "sb4", name: "Скручивания на пресс «Молитва»", sets: 3 }
+                { id: "sb4", name: "Скручивания на пресс на верхнем блоке «Молитва»", sets: 3 },
+                { id: "sb5", name: "Планка со смещением веса или «Вакуум»", sets: 3 }
             ]
         }
     };
 
     let currentDay = 'пн';
-    // Структура истории: { exerciseId: [ {set1_weight, set1_reps}, ... ] }
     let workoutHistory = JSON.parse(localStorage.getItem('workoutHistory')) || {};
 
-    // Отрисовка интерфейса под выбранный день
+    // Функция отрисовки упражнений выбранного дня
     function renderWorkout(day) {
         const container = document.getElementById('workout-container');
         const data = program[day];
         
+        if (!data) return;
+
         let html = `<h2>${data.title}</h2>`;
         
         data.exercises.forEach(ex => {
@@ -242,48 +273,19 @@
                     <div class="sets-list">
             `;
             
-            // Получаем историю конкретно для этого упражнения
             const exHistory = workoutHistory[ex.id] || [];
 
+            // Для планки/вакуума меняем подписи на Секунды вместо Повторов
+            const isTimeBased = ex.name.includes("Планка") || ex.name.includes("Вакуум");
+            const repsLabel = isTimeBased ? "Сек" : "Повторы";
+
             for (let i = 1; i <= ex.sets; i++) {
-                // Ищем данные по подходу с прошлой тренировки
                 const pastSet = exHistory[i - 1];
-                const hintText = pastSet ? `Было: ${pastSet.weight}кг × ${pastSet.reps}` : 'Было: —';
+                let hintText = 'Было: —';
+                if (pastSet) {
+                    hintText = isTimeBased ? `Было: ${pastSet.reps} сек` : `Было: ${pastSet.weight}кг × ${pastSet.reps}`;
+                }
 
                 html += `
                     <div class="set-row" data-set-num="${i}">
                         <div class="set-number">${i}</div>
-                        <div class="input-group">
-                            <label>Вес (кг)</label>
-                            <input type="number" class="weight-input" placeholder="0" step="0.5">
-                            <div class="history-hint">${hintText}</div>
-                        </div>
-                        <div class="input-group">
-                            <label>Повторы</label>
-                            <input type="number" class="reps-input" placeholder="0">
-                            <div class="history-hint"></div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            html += `</div></div>`;
-        });
-        
-        container.innerHTML = html;
-    }
-
-    // Переключение вкладок дней недели
-    function switchDay(day) {
-        currentDay = day;
-        document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-        renderWorkout(day);
-    }
-
-    // Сохранение весов текущего дня
-    function saveCurrentWorkout() {
-        const cards = document.querySelectorAll('.exercise-card');
-        
-        cards.forEach(card => {
-            const exId = card.getAttribute('data-ex-id');
